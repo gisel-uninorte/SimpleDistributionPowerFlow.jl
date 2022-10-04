@@ -7,7 +7,7 @@ The data entry is made with standard definition csv files. It identifies some in
 
 Grid topology is identified based on input line segments, transformers and switches information and the graph is plotting even without bus_coords file or with missing bus location information.
 
-Two commands are provided: `gridtopology()` to only topology verification, and `powerflow()` to evaluate voltages, currents, power and losses in circuit.
+Two commands are provided: `gridtopology()` for topology verification only, and `powerflow()` for voltages, currents, power and losses evaluation.
 
 
 ## Installation
