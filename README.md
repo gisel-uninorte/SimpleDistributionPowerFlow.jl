@@ -1,5 +1,5 @@
 # SimpleDistributionPowerFlow.jl
-<img src="https://github.com/gisel-uninorte/SimpleDistributionPower.jl/blob/main/images/SimpleDistributionPowerFlow_logo.png" align="left" width="200" alt="SimpleDistributionPowerFlow.jl logo">
+<img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/SimpleDistributionPowerFlow_logo.png" align="left" width="200" alt="SimpleDistributionPowerFlow.jl logo">
 
 SimpleDistributionPowerFlow.jl is a Julia language package for steady-state radial distribution systems powerflow analysis focused on usage simplicity with reliable and fast results.
 
