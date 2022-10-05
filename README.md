@@ -15,9 +15,9 @@ Results are saved in current directory by default or in the directory specified 
 
 ## Installation
 ```julia
-julia> using Pkg
-julia> Pkg.add(CSV, DataFrames, Plots, GraphRecipes)
-julia> Pkg.add(url="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl")
+julia> ]
+pkg> add CSV, DataFrames, Plots, GraphRecipes
+pkg> add https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl
 ```
 
 ## Configuration files
