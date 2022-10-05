@@ -30,7 +30,7 @@ transformers.csv           | optional | config,kva,phases,<br />conn_high,conn_l
 switches.csv               | optional | config,phases,state,resistance | phases: abc, resistance in ohms
 bus_coords.csv             | optional | bus,x_pos,y_pos |
 regulators.csv             | optional | config,phases,mode,tap_1,tap_2,tap_3 | mode: manual only
-distributed_generation.csv | optional | bus,conn,mode,kw_set,kvar_set,kv_set,amp_set,kvar_min,kvar_max,xd | bus, conn, mode and kw_set are mandatories, others params depends on distributed generation mode
+distributed_generation.csv | optional | bus,conn,mode,kw_set,<br />kvar_set,kv_set,amp_set,<br />kvar_min,kvar_max,xd | bus, conn, mode and kw_set are mandatories, others params depends on distributed generation mode
 
 
 ## Usage
