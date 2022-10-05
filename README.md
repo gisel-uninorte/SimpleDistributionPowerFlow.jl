@@ -67,7 +67,7 @@ marker_size = Float    | set the size of bus identifier in graph | 1.5 | _powerf
 
 
 ## Examples
-Full configuration files for IEEE-4, IEEE-13, IEEE-34 and IEEE-123 node test feeders are in `/examples` directory.
+Full configuration files for selected IEEE node test feeders are in `/examples` directory.
 
 ***Special features***:
 This package graphs the grid topology even if there is no `bus_coords.csv` file, it also calculates the graph in case of missing or duplicate bus information: 
