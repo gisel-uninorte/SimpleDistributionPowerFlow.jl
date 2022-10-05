@@ -23,3 +23,7 @@ docs/site/
 # environment.
 Manifest.toml
 .devcontainer
+
+# Examples and package additional documentation
+examples/
+results/

@@ -419,9 +419,9 @@ function data_preparation()
         
         #cheking PI Distributed Generation registers
         pi_distributed_gen = filter(row -> row.mode == "PI",distributed_gen)
-        if !(nrow(pi_distributed_gen) == nrow(dropmissing(dropmissing(dropmissing(dropmissing(pi_distributed_gen,:kw_set),:i_set),:kvar_min),:kvar_max)))
+        if !(nrow(pi_distributed_gen) == nrow(dropmissing(dropmissing(dropmissing(dropmissing(pi_distributed_gen,:kw_set),:amp_set),:kvar_min),:kvar_max)))
             println("PI distributed generation register with missing values, it will be ignored.")
-            dropmissing!(dropmissing!(dropmissing!(dropmissing!(pi_distributed_gen,:kw_set),:i_set),:kvar_min),:kvar_max)
+            dropmissing!(dropmissing!(dropmissing!(dropmissing!(pi_distributed_gen,:kw_set),:amp_set),:kvar_min),:kvar_max)
         end
         if nrow(filter(row -> !(row.bus in working_buses[!,:id]), pi_distributed_gen)) > 0
             println("PI distributed generation at non-existent bus, it will be ignored.")
@@ -439,7 +439,7 @@ function data_preparation()
                                             pi_distributed_gen[n,:kw_set]/3, (pi_distributed_gen[n,:kvar_min] + pi_distributed_gen[n,:kvar_max])/3,
                                             pi_distributed_gen[n,:kw_set]/3, (pi_distributed_gen[n,:kvar_min] + pi_distributed_gen[n,:kvar_max])/3, 0))
             end
-            select!(pi_distributed_gen,[:bus, :conn, :mode, :kw_set, :i_set, :kvar_min, :kvar_max])
+            select!(pi_distributed_gen,[:bus, :conn, :mode, :kw_set, :amp_set, :kvar_min, :kvar_max])
             pi_distributed_gen = [pi_distributed_gen DataFrame(zeros(nrow(pi_distributed_gen),4),[:v_ph1,:v_ph2,:v_ph3,:max_diff])]
             pi_distributed_gen = [pi_distributed_gen DataFrame(zeros(nrow(pi_distributed_gen),6),[:w_ph1 ,:w_ph2,:w_ph3,:var_ph1,:var_ph2,:var_ph3])]
             has_pi_distributed_gen = true

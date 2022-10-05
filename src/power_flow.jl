@@ -189,22 +189,22 @@ function powerflow(; input="", output="",
                     volt_pi_bus = filter(row -> row.id == pi_distributed_gen[n,:bus], volt_pi_buses)
                     volt_pi_new = [abs(volt_pi_bus[1,:v_ph1]), abs(volt_pi_bus[1,:v_ph2]), abs(volt_pi_bus[1,:v_ph3])]
 
-                    i_set = pi_distributed_gen[n,:i_set]
+                    amp_set = pi_distributed_gen[n,:amp_set]
                     p_phase = pi_distributed_gen[n,:kw_set]*1000/3
                     w_ph1 = p_phase
                     w_ph2 = p_phase
                     w_ph3 = p_phase
 
-                    if !((i_set*volt_pi_new[1])^2 - p_phase^2 < 0)
-                        var_ph1 = sqrt((i_set*volt_pi_new[1])^2 - p_phase^2)
+                    if !((amp_set*volt_pi_new[1])^2 - p_phase^2 < 0)
+                        var_ph1 = sqrt((amp_set*volt_pi_new[1])^2 - p_phase^2)
                     else var_ph1 = pi_distributed_gen[n,:kvar_min]*1000/3
                     end
-                    if !((i_set*volt_pi_new[2])^2 - p_phase^2 < 0)
-                        var_ph2 = sqrt((i_set*volt_pi_new[2])^2 - p_phase^2)
+                    if !((amp_set*volt_pi_new[2])^2 - p_phase^2 < 0)
+                        var_ph2 = sqrt((amp_set*volt_pi_new[2])^2 - p_phase^2)
                     else var_ph2 = pi_distributed_gen[n,:kvar_min]*1000/3
                     end
-                    if !((i_set*volt_pi_new[3])^2 - p_phase^2 < 0)
-                        var_ph3 = sqrt((i_set*volt_pi_new[3])^2 - p_phase^2)
+                    if !((amp_set*volt_pi_new[3])^2 - p_phase^2 < 0)
+                        var_ph3 = sqrt((amp_set*volt_pi_new[3])^2 - p_phase^2)
                     else var_ph3 = pi_distributed_gen[n,:kvar_min]*1000/3
                     end
 

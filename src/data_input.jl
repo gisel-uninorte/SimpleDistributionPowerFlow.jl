@@ -244,7 +244,7 @@ function read_input_files(input_directory, caller)
         #Reading distributed generation data
         distributed_gen, err_msg = read_file(input_directory,"distributed_generation.csv")
         if err_msg == ""
-            if !(names(distributed_gen) == ["bus","conn","mode","kw_set","kvar_set","kv_set","i_set","kvar_min","kvar_max","xd"])
+            if !(names(distributed_gen) == ["bus","conn","mode","kw_set","kvar_set","kv_set","amp_set","kvar_min","kvar_max","xd"])
                 err_msg = "check for column names in 'distributed_generation.csv' file"
                 return err_msg
             else
