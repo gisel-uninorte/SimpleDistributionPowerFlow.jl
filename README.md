@@ -3,6 +3,8 @@
 
 SimpleDistributionPowerFlow.jl is a Julia language package for steady-state unbalanced radial distribution systems powerflow analysis focused on usage simplicity with reliable and fast results.
 
+The simplicity of the package is based on the data entry and package usage:
+
 The data entry is made with standard definition csv files. It identifies some input situations such as distributed loads, isolated segments, open/closed switches and works automatically according to such situations, per example adding auxiliar buses, purging segments and/or reordering buses. It accept some types of distributed generation also.
 
 Two commands are provided: `gridtopology()` for topology verification only, and `powerflow()` for voltages, currents, power and losses evaluation.
