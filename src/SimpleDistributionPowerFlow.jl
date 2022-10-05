@@ -1,3 +1,8 @@
+# This file is part of SimpleDistributionPowerFlow.jl package
+# It is MIT licensed
+# Copyright (c) 2022 Gustavo Espitia, Cesar Orozco, Maria Calle, Universidad del Norte
+# Terms of license are in https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/LICENSE
+
 module SimpleDistributionPowerFlow
 
 using CSV, DataFrames, Plots, GraphRecipes, Dates
@@ -11,4 +16,4 @@ include("print_results.jl")
 
 export powerflow, gridtopology
 
-end # module
+end

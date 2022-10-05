@@ -1,7 +1,7 @@
 name = "SimpleDistributionPowerFlow"
 uuid = "f823eff6-be4d-43a7-b42c-2ec4700fde1f"
 authors = ["Gustavo Espitia <gespitia@uninorte.edu.co>"]
-version = "0.1.0"
+version = "0.3.0"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"

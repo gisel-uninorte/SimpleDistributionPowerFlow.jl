@@ -24,6 +24,6 @@ docs/site/
 Manifest.toml
 .devcontainer
 
-# Examples and package additional documentation
+# Package examples and additional documentation
 examples/
 results/
