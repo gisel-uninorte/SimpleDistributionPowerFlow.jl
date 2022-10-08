@@ -67,7 +67,7 @@ marker_size = Float    | set the size of bus identifier in graph | 1.5 | _powerf
 
 
 ## Examples
-Full configuration files for selected IEEE node test feeders are in [Examples section](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/examples/) 
+Full configuration files for selected IEEE node test feeders are in [Examples](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/examples/) section. 
 
 ***Special features***:
 This package graphs the grid topology even if there is no `bus_coords.csv` file, it also calculates the graph in case of missing or duplicate bus information: 
