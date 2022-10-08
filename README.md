@@ -47,7 +47,7 @@ options | purpose | default | examples
 input = "String"  | input files location  | "" <br />(pwd) | _gridtopology(input = "examples/ieee-34")_
 output = "String" | results files location |"" <br />(pwd) | _gridtopology(output = "results")_
 display_topology = bool | display in screen the identified grid topology| false | _gridtopology(display_topology = true)_
-timestamp = bol | add a timestamp to results file names  | false | _gridtopology(timestamp = true)_
+timestamp = bool | add a timestamp to results file names  | false | _gridtopology(timestamp = true)_
 graph_title = "String" | set a title in topology graph | "" (nothing)| _gridtopology(graph_title = "modified ieee-34 test feeder")_
 marker_size = Float    | set the size of bus identifier in graph | 1.5 | _gridtopology(marker_size = 10)_
 
@@ -60,14 +60,14 @@ output = "String"  | results files location |"" <br />(pwd) | _powerflow(output 
 tolerance = Float  | maximum porcentual difference between calculated and nominal substation bus voltage  | 1e-6 | _powerflow(tolerance = 0.001)_
 max_iteration = Int | maximum number of iteration before procedure halt | 30 | _powerflow(max_iteration = 100)_
 display_results = bool | display in terminal bus voltage results | true | _powerflow(display_results = false)_
-display_topology = bol | display in screen the identified grid topology | false | _powerflow(display_topology = true)_
+display_topology = bool | display in screen the identified grid topology | false | _powerflow(display_topology = true)_
 timestamp = bol | add a timestamp to results file names | false | _powerflow(timestamp = true)_
 graph_title = "String" | set a title in topology graph | "" (nothing)| _powerflow(graph_title = "modified ieee-34 test feeder")_
 marker_size = Float    | set the size of bus identifier in graph | 1.5 | _powerflow(marker_size = 10)_
 
 
 ## Examples
-Full configuration files for selected IEEE node test feeders are in `/examples` directory.
+Full configuration files for selected IEEE node test feeders are in [Examples section](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/examples/) 
 
 ***Special features***:
 This package graphs the grid topology even if there is no `bus_coords.csv` file, it also calculates the graph in case of missing or duplicate bus information: 
