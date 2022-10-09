@@ -23,7 +23,7 @@ docs/site/
 # environment.
 Manifest.toml
 .devcontainer
+.vscode
 
 # Package examples and additional documentation
-examples/
 results/
