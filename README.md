@@ -11,8 +11,6 @@ Two commands are provided: `gridtopology()` for topology verification only, and 
 
 Grid topology is discovered based on input line segments, transformers and the switches states information, and the graph is plotting even without bus_coords file or with missing bus location information. Power flow evaluation takes in account the discovered topology, spot and distributed loads and distributed generation if any.
 
-Results are saved in current directory by default or in the directory specified by _output_ argument.
-
 ## Installation
 ```julia
 julia> using Pkg
