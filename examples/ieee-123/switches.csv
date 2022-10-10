@@ -1,0 +1,13 @@
+config,phases,state,resistance
+sw1,abc,closed,0
+sw2,abc,closed,0
+sw3,abc,closed,0
+sw4,abc,closed,0
+sw5,abc,closed,0
+sw6,abc,closed,0
+sw7,abc,open,0
+sw8,abc,open,0
+sw9,abc,open,0
+sw10,abc,open,0
+sw11,abc,open,0
+sw12,abc,open,0

@@ -1,0 +1,5 @@
+config,phases,mode,tap_1,tap_2,tap_3
+rg1,abc,manual,7,7,7
+rg2,a,manual,-1,0,0
+rg3,ac,manual,0,0,-1
+rg4,abc,manual,8,1,5
