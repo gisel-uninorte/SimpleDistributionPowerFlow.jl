@@ -1,0 +1,2 @@
+config,kva,phases,conn_high,conn_low,kv_high,kv_low,rpu,xpu
+XFM1,500,abc,grY,grY,24.900,4.160,0.0190,0.0408

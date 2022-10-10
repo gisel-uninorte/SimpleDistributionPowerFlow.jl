@@ -1,0 +1,4 @@
+config,phases,mode,tap_1,tap_2,tap_3
+reg0,abc,manual,8,8,8
+reg1,abc,manual,12,5,5
+reg2,abc,manual,13,11,12
