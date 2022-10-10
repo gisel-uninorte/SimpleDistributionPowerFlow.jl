@@ -8,8 +8,8 @@ Original test case can be downloaded from https://cmte.ieee.org/pes-testfeeders/
 The `using` command is only needed once per Julia sesion:
 ```julia
 julia> using  SimpleDistributionPowerFlow
-julia> gridtopology(input="examples/ieee-34", output="results", graph_title="IEEE 34 Node Test Feeder")
-julia> powerflow(input="examples/ieee-34", output="results", graph_title="IEEE 34 Node Test Feeder")
+julia> gridtopology(input="examples/ieee-34", output="results", graph_title="IEEE 34 Node Test Feeder", marker_size=10)
+julia> powerflow(input="examples/ieee-34", output="results", graph_title="IEEE 34 Node Test Feeder", marker_size=10)
 ```
 
 <table>
