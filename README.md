@@ -65,10 +65,29 @@ graph_title = "String" | set a title in topology graph | "" (nothing)| _powerflo
 marker_size = Float    | set the size of bus identifier in graph | 1.5 | _powerflow(marker_size = 10)_
 
 
-## Examples
-Full configuration files for selected IEEE node test feeders are in [examples](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/examples/) section. 
+## Special features
 
-***Special features***:
+**Distributed Loads**<br>
+If there are distributed loads, auxiliar buses are automatically added in the middle of segments (50% of segment lenght) with 100% of the load applied as spot load on them. These buses are retired and segments are restored after powerflow execution and before results are printed.
+<table>
+  <tr>
+    <td><img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/modified_ieee_34_ex_1_input.png"</td>
+    <td><img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/modified_ieee_34_ex_1_working.png"</td>
+  </tr>
+</table>
+
+**Distributed Generation**<br>
+To include DG in power flow analysis _distributed_generation.csv_ file is needed. Currently following modes of DG in balanced three-phase operation are modeled: **PQ** (constant active and reactive power), **PQV** (constant active power, voltage dependant reactive power), and **PI** (constant active power and current). PQV is modeled as a synchronous generator.
+
+Format of _distributed_generation.csv_ file and required (req) values are shown in following table.
+
+bus | conn | mode | kw_set | kvar_set | kv_set | amp_set | kvar_min | kvar_max | xd
+--- | ---  | ---  | ---    | ---      | ---    | ---     | ---      | ---      | ---
+_req_ | _req_  | PQ  | _req_    | _req_      | ---    | ---     | ---      | ---      | ---
+_req_ | _req_  | PQV  | _req_    | ---      | _req_   | ---     | _req_     | _req_      | _req_
+_req_ | _req_  | PI  | _req_  | ---      | ---    | _req_     | _req_    | _req_     | ---
+
+**Topology graph**<br>
 This package graphs the grid topology even if there is no `bus_coords.csv` file, it also calculates the graph in case of missing or duplicate bus information: 
 <table>
   <tr>
@@ -77,6 +96,14 @@ This package graphs the grid topology even if there is no `bus_coords.csv` file,
   </tr>
 </table>
 
+**Topology changes**<br>
+If grid's topology is changed by opening and closing switches, the from-to buses relation in affected segments are adjusted before powerflow analysis. If a loop is detected, the procedure is halted (for now the package only works with radial topology).
+<table>
+  <tr>
+    <td><img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/modified_ieee_13_ex_2.png"</td>
+    <td><img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/modified_ieee_13_ex_3.png"</td>
+  </tr>
+</table>
 
 If `line_segments.csv` file has isolated segments by open switch or by error, they are pruned before powerflow analysis. Two graph are generated: _input topology_ is the detected topology from input files, and _working topology_ is the corrected one): 
 <table>
@@ -87,22 +114,8 @@ If `line_segments.csv` file has isolated segments by open switch or by error, th
 </table>
 
 
-If grid's topology is changed by opening and closing switches, the from-to buses relation in affected segments are adjusted before powerflow analysis. If a loop is detected, the procedure is halted (for now the package only works with radial topology).
-<table>
-  <tr>
-    <td><img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/modified_ieee_13_ex_2.png"</td>
-    <td><img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/modified_ieee_13_ex_3.png"</td>
-  </tr>
-</table>
-
-
-If there are distributed loads, auxiliar buses are added in the middle of segments (50% of lenght) with 100% of the load applied as spot load on them. These buses are retired and segments are restored after powerflow execution and before results are printed.
-<table>
-  <tr>
-    <td><img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/modified_ieee_34_ex_1_input.png"</td>
-    <td><img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/modified_ieee_34_ex_1_working.png"</td>
-  </tr>
-</table>
+## Examples
+Full configuration files for selected IEEE node test feeders are in [examples](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/examples/) section. 
 
 
 ## Minimun Dependency
