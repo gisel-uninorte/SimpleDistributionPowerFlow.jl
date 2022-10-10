@@ -37,7 +37,7 @@ julia> powerflow(input="examples/ieee-4", output="results", graph_title="IEEE 4 
 ```
 
 SimpleDistributionPowerFlow.jl always generates two topologies: one based on input data (_input topology_) and another after checking the input topology (_working topology_).
-In this example *there is no bus_coords.csv file* for this reason the relative location of the buses in the graph are different while the topology is the same.
+In this example **there is no bus_coords.csv file** for this reason the relative location of the buses in the graph are different while the topology is the same.
 
 <table>
   <tr>
