@@ -113,7 +113,7 @@ If `line_segments.csv` file has isolated segments by open switch or by error, th
 
 
 ## Examples
-Full configuration files for selected IEEE node test feeders are in [examples](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/examples/) section. 
+Full configuration files for selected IEEE test feeders are in [examples](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/examples/) section. 
 
 
 ## Minimun Dependency
