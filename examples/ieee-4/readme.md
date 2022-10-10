@@ -1,6 +1,6 @@
 # IEEE 4-Bus Test Feeder Cases
 
-This directory has the configuration files for the Standard 4-Bus Test Feeder Cases which have the following topology:
+This directory has the configuration files for the Standard IEEE 4 Node Test Feeder Cases which have the following topology:
 <img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/ieee_4_bus_std_test_feeder.png" alt="Standard IEEE 4-Bus Test Feeder Topology">
 
 Original test case can be downloaded from https://cmte.ieee.org/pes-testfeeders/wp-content/uploads/sites/167/2017/08/feeder4.zip
@@ -26,14 +26,14 @@ julia> powerflow(input="examples\\ieee-4", output="results")
 
 You can aggregate a title to the topology graph, per example:
 ```julia
-julia> gridtopology(input="examples/ieee-4", output="results", graph_title="IEEE 4-Bus Test Feeder")
-julia> powerflow(input="examples/ieee-4", output="results", graph_title="IEEE 4-Bus Test Feeder")
+julia> gridtopology(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder")
+julia> powerflow(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder")
 ```
 
 By default, SimpleDistributionPowerFlow does not display the topology on the screen, although the graphics are saved in png files. If you want to get the image on the screen after the execution of the command, you have to specify it:
 ```julia
-julia> gridtopology(input="examples/ieee-4", output="results", graph_title="IEEE 4-Bus Test Feeder", display_topology=true)
-julia> powerflow(input="examples/ieee-4", output="results", graph_title="IEEE 4-Bus Test Feeder", display_topology=true)
+julia> gridtopology(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder", display_topology=true)
+julia> powerflow(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder", display_topology=true)
 ```
 
 SimpleDistributionPowerFlow.jl always generates two topologies: one based on input data (_input topology_) and another after checking the input topology (_working topology_).
