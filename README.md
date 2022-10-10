@@ -106,7 +106,7 @@ If there are distributed loads, auxiliar buses are added in the middle of segmen
 
 
 ## Minimun Dependency
-Simplicity of [SimpleDistributionPowerFlow.jl](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl) is based also in its low dependency of other packages. 
+Simplicity of [SimpleDistributionPowerFlow.jl](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl) is based also on its low dependency of other packages. 
 It only relies in [DataFrames](https://github.com/JuliaData/DataFrames.jl), [Plots](https://github.com/JuliaPlots/Plots.jl), [GraphRecipes](https://github.com/JuliaPlots/GraphRecipes.jl) and [CSV](https://github.com/JuliaData/CSV.jl)
 
 
