@@ -25,7 +25,7 @@ In the working topology a bus was added to model the distributed load between bu
 
 More explanations on specific command arguments can be found in [ieee-4](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-4) example. 
 
-#For Distributed Generation
+## For Distributed Generation
 To execute powerflow with DG you only need to change the name of the first file to distributed_generation.csv (eliminating the first underscore sign).
 
 In the example there are Different DG at buses 634 (PQ), 671 (PQV) and 675 (PI), connected in wye or delta. Value of xd for PQV DG is in ohm.
