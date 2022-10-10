@@ -1,6 +1,6 @@
 # IEEE 123-Bus Test Feeder
 
-This directory has the configuration files for the Standard IEEE 34 Node Test Feeder which has the following topology:
+This directory has the configuration files for the Standard IEEE 123 Node Test Feeder which has the following topology:
 <img src="https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/images/ieee_123_bus_std_test_feeder.png" alt="Standard IEEE 123-Bus Test Feeder Topology">
 
 Original test case can be downloaded from https://cmte.ieee.org/pes-testfeeders/wp-content/uploads/sites/167/2017/08/feeder123.zip 
