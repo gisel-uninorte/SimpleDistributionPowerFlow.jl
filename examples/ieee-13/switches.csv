@@ -1,0 +1,4 @@
+config,phases,state,resistance
+Switch1,abc,closed,1e-6
+Switch2,abc,open,1e-6
+Switch3,abc,open,1e-6
