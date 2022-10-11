@@ -5,6 +5,8 @@ This directory has the configuration files for the Standard IEEE 4 Node Test Fee
 
 Original test case can be downloaded from https://cmte.ieee.org/pes-testfeeders/wp-content/uploads/sites/167/2017/08/feeder4.zip
 
+In _line_segments.csv_ file you can change the config codes to get the power flow results for different transformers: grY-grY, YD, D-grY and D-D (read the specific codename in _transformers.csv_ file). Be aware of change the config code for line segment in concordance with each side of the transformer.
+
 The following explanation suppose that SimpleDistributionPowerFlow.jl package is already installed and you had executed the following command:
 ```julia
 julia> using  SimpleDistributionPowerFlow
