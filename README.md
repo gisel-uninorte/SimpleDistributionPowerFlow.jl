@@ -24,7 +24,7 @@ filename | required | column names | comments
 line_segments.csv          | yes | bus1,bus2,length,unit,config | bus1 and bus 2: Int, unit: String <br />(ft, mi, m, km only accepted)
 line_configurations.csv    | yes | config,unit,<br />raa,xaa,rab,xab,rac,xac,<br />rbb,xbb,rbc,xbc,<br />rcc,xcc,<br />baa,bab,bac,bbb,bbc,bcc | unit: String <br />represents ohm/unit or micro-siemens/unit <br />(ft, mi, m, km only accepted)
 substation.csv             | yes | bus,kva,kv | kv: line-to-line voltage in kilovolts
-spot_loads.csv             | yes | bus,conn,type,<br />kw_ph1,kvar_ph1,<br />kw_ph2,kvar_ph2,<br />kw_ph3,kvar_ph3 | conn: Y/D, type: PQ/Z/I, <br />ph1/2/3 represents A/B/C for Y connection, <br />and A-B/B-C/C-A for D connection
+spot_loads.csv             | yes | bus,conn,type,<br />kw_ph1,kvar_ph1,<br />kw_ph2,kvar_ph2,<br />kw_ph3,kvar_ph3 | conn: Y/D,<br>type: PQ/Z/I, <br />ph1/2/3 represents A/B/C for Y connection, <br />and A-B/B-C/C-A for D connection
 distributed_loads.csv      | optional | bus1,bus2,conn,type,<br />kw_ph1,kvar_ph1,<br />kw_ph2,kvar_ph2,<br />kw_ph3,kvar_ph3 | 
 capacitors.csv             | optional | bus,kvar_ph1,kvar_ph2,kvar_ph3 |
 transformers.csv           | optional | config,kva,phases,<br />conn_high,conn_low,<br />kv_high,kv_low,<br />rpu,xpu | currently only grY-grY, Y-D, D-grY and D-D three-phase step-down transformer configurations are accepted
