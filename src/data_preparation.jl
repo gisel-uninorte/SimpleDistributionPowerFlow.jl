@@ -450,7 +450,7 @@ function data_preparation()
             has_pi_distributed_gen = true
         end
 
-        #pending models (also pendig PQ(v) async generator based, and specific photovoltaic model with curves)
+        #=pending models (also pendig PQ(v) async generator based, and specific photovoltaic model with curves)
         pv_distributed_gen = filter(row -> row.mode == "PV",distributed_gen)
         if !(nrow(pv_distributed_gen) == nrow(dropmissing(dropmissing(dropmissing(dropmissing(pv_distributed_gen,:kw_set),:kv_set),:kvar_min),:kvar_max)))
             println("PV distributed generation register with missing values, it will be ignored.")
@@ -477,87 +477,13 @@ function data_preparation()
             pv_distributed_gen = [pv_distributed_gen DataFrame(zeros(nrow(pi_distributed_gen),6),[:kw_ph1 ,:kw_ph2,:kw_ph3,:kvar_ph1,:kvar_ph2,:kvar_ph3])]
             has_pv_distributed_gen = true
         end
+        =#
 
         #checking dg
         if !(has_pq_distributed_gen || has_pqv_distributed_gen || has_pi_distributed_gen)
             has_distributed_gen = false   
         end
     end
-    #=
-    if has_pv_distributed_gen
-        pv_dg_route = DataFrame(dg=Int64[], bus2=Int64[], bus1=Int64[])
-        for n = 1:nrow(pv_distributed_gen)
-            last_bus = pv_distributed_gen[n,:bus]
-            for m = 1:nrow(lines)
-                route_segment=filter(row -> row.bus2 == last_bus, lines)
-                if !(nrow(route_segment) ==0)
-                    push!(pv_dg_route,(pv_distributed_gen[n,:bus],route_segment[1,:bus2],route_segment[1,:bus1]))
-                    last_bus = last(pv_dg_route).bus1
-                end
-            end
-        end
-
-        pv_dg_route.x1 = missings(Float64, nrow(pv_dg_route))
-
-
-
-        for m = 1:nrow(pv_dg_route)
-            segment = filter(row -> row.bus1 == pv_dg_route[m,:bus1] && row.bus2 == pv_dg_route[m,:bus2], lines)
-            zabc_segment = [segment[1,:Zaa] segment[1,:Zab] segment[1,:Zac];
-                            segment[1,:Zab] segment[1,:Zbb] segment[1,:Zbc];
-                            segment[1,:Zac] segment[1,:Zbc] segment[1,:Zcc]]
-            zseq_segment = inv(As)*zabc_segment*As
-            pv_dg_route[m,:x1] = imag(zseq_segment[2,2])
-        end
-
-        sum_x_ii = combine(groupby(pv_dg_route, :dg), :x1 => sum)
-
-        shared_route = DataFrame(dg1=Int64[], dg2=Int64[], sum_x_ij=Float64[])
-        for n1 = 1:nrow(pv_distributed_gen)
-            for n2 = 1:nrow(pv_distributed_gen)
-                shared_sum = 0
-                if !(n1 == n2)
-                    dg1_route = filter(row -> row.dg == pv_distributed_gen[n1,:bus], pv_dg_route)
-                    dg2_route = filter(row -> row.dg == pv_distributed_gen[n2,:bus], pv_dg_route)
-                    for g1 = 1:nrow(dg1_route)
-                        for g2 = 1:nrow(dg2_route)
-                            if dg1_route[g1,:bus2] == dg2_route[g2,:bus2] && dg1_route[g1,:bus1] == dg2_route[g2,:bus1]
-                                shared_sum += dg1_route[g1,:x1]
-                            end
-                        end
-                    end
-                    push!(shared_route, (pv_distributed_gen[n1,:bus], pv_distributed_gen[n2,:bus], shared_sum))
-                end
-            end
-        end
-        
-        #println("sum_xii: $(sum_x_ii)")
-        #println("shared_route: $(shared_route)")
-
-        x_seq_df = select(pv_distributed_gen,:bus =>:dg)
-        x_seq_df = [x_seq_df DataFrame(Matrix{Union{Complex,Nothing}}(nothing,nrow(x_seq_df),nrow(x_seq_df)),:auto)]
-
-        for n1 = 1:nrow(x_seq_df)
-            for n2 = 1:nrow(x_seq_df)
-                if n1 == n2
-                    x_seq_df[n1,n1+1] = filter(row -> row.dg == x_seq_df[n1,:dg],sum_x_ii)[1,:x1_sum]*im
-                else x_seq_df[n1,n2+1] = filter(row -> row.dg1 == x_seq_df[n1,:dg] && row.dg2 == x_seq_df[n2,:dg],shared_route)[1,:sum_x_ij]*im
-                end
-            end
-        end    
-
-        println("x_seq_df: $(x_seq_df)")
-
-        x_seq_mat = Matrix(select(x_seq_df, Not(:dg)))
-
-        x_seq = Matrix{ComplexF64}[]
-        push!(x_seq, x_seq_mat)
-        
-        #println("x_seq_df: $(x_seq_df)")
-        #println("x_seq_mat: $(x_seq_mat)")
-        #println("x_seq: $(x_seq)")
-    end
-    =#
 
     #adding constants to loads
     loads = [loads DataFrame(Matrix{Union{Complex,Nothing}}(nothing,nrow(loads),3),[:k_1,:k_2,:k_3])]

@@ -67,7 +67,7 @@ Here `gridtopology()` discover the topology of the network specified by configur
 Two png image files will be saved in the directory named results, their filenames will have a sufix with the date-hour-minute of creation.
 Topology images will also be displayed on screen with the specified title. The bus indicator circle marker will have a relative size of 12. 
 """
-function gridtopology(; caller="user", input="", output="", display_topology=false, graph_title="",  marker_size=1.5, timestamp=false)
+function gridtopology(; caller="user", input="", output="", display_topology=false, graph_title="",  marker_size=1.5, timestamp=false, verbose=0)
     #generated variables
     global output_dir
     global working_segments
@@ -98,7 +98,7 @@ function gridtopology(; caller="user", input="", output="", display_topology=fal
     output_dir,err_msg = directory_check(directory, type)
 
     #Reading input files
-    err_msg = read_input_files(input_dir, caller)
+    err_msg = read_input_files(input_dir, caller, verbose)
     if !(err_msg == "")
         if caller == "user"
             println("Execution aborted, $(err_msg)")

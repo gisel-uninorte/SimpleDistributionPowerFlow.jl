@@ -75,12 +75,12 @@ and executes the forward and backward sweeps until the calculated substation vol
 function powerflow(; input="", output="", 
                      tolerance=1e-6, max_iterations=30, 
                      display_results=true, timestamp=false,
-                     display_topology=false, graph_title="",  marker_size=1.5)
+                     display_topology=false, graph_title="",  marker_size=1.5, verbose=0)
     
-
+    
     #Data input and discovery topology
     err_msg = gridtopology(caller="powerflow", input=input, output=output, timestamp=timestamp,
-                           display_topology=display_topology, graph_title=graph_title, marker_size=marker_size)
+                           display_topology=display_topology, graph_title=graph_title, marker_size=marker_size, verbose=verbose)
     if !(err_msg == "")
         return ("Execution aborted, $(err_msg)")
         
@@ -96,7 +96,7 @@ function powerflow(; input="", output="",
     #powerflow procedure
     global outer_iteration = 0
     global inner_iteration
-    max_diff = 1
+    max_diff = 1.0
     while   max_diff > tolerance
         
         #forward and backward procedure without DG and PQ DG only
@@ -260,7 +260,9 @@ function powerflow(; input="", output="",
 
     #Results report
     if err_msg == ""
-        println("Execution finished, $(outer_iteration) outer iterations, $(inner_iteration) inner iterations for last outer round, $(tolerance) tolerance")
+        if !(verbose == 0)
+            println("Execution finished, $(outer_iteration) outer iterations, $(inner_iteration) inner iterations (for latest outer round), $(tolerance) tolerance")
+        end
         #Write files with detailed powerflow results
         results(display_results,timestamp)
         else

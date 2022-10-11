@@ -21,12 +21,12 @@ julia> Pkg.add("SimpleDistributionPowerFlow")
 
 ## Configuration files
 
-filename | type | column names | comments
+filename | required | column names | comments
 --- | --- | --- | ---
-line_segments.csv          | required | bus1,bus2,length,unit,config | bus1 and bus 2: Int, unit: String <br />(ft, mi, m, km only accepted)
-line_configurations.csv    | required | config,unit,<br />raa,xaa,rab,xab,rac,xac,<br />rbb,xbb,rbc,xbc,<br />rcc,xcc,<br />baa,bab,bac,bbb,bbc,bcc | unit: String <br />represents ohm/unit or micro-siemens/unit <br />(ft, mi, m, km only accepted)
-substation.csv             | required | bus,kva,kv | kv: line-to-line voltage in kilovolts
-spot_loads.csv             | required | bus,conn,type,<br />kw_ph1,kvar_ph1,<br />kw_ph2,kvar_ph2,<br />kw_ph3,kvar_ph3 | conn: Y/D, type: PQ/Z/I, <br />ph1/2/3 represents A/B/C for Y connection, <br />and A-B/B-C/C-A for D connection
+line_segments.csv          | yes | bus1,bus2,length,unit,config | bus1 and bus 2: Int, unit: String <br />(ft, mi, m, km only accepted)
+line_configurations.csv    | yes | config,unit,<br />raa,xaa,rab,xab,rac,xac,<br />rbb,xbb,rbc,xbc,<br />rcc,xcc,<br />baa,bab,bac,bbb,bbc,bcc | unit: String <br />represents ohm/unit or micro-siemens/unit <br />(ft, mi, m, km only accepted)
+substation.csv             | yes | bus,kva,kv | kv: line-to-line voltage in kilovolts
+spot_loads.csv             | yes | bus,conn,type,<br />kw_ph1,kvar_ph1,<br />kw_ph2,kvar_ph2,<br />kw_ph3,kvar_ph3 | conn: Y/D, type: PQ/Z/I, <br />ph1/2/3 represents A/B/C for Y connection, <br />and A-B/B-C/C-A for D connection
 distributed_loads.csv      | optional | bus1,bus2,conn,type,<br />kw_ph1,kvar_ph1,<br />kw_ph2,kvar_ph2,<br />kw_ph3,kvar_ph3 | 
 capacitors.csv             | optional | bus,kvar_ph1,kvar_ph2,kvar_ph3 |
 transformers.csv           | optional | config,kva,phases,<br />conn_high,conn_low,<br />kv_high,kv_low,<br />rpu,xpu | currently only grY-grY, Y-D, D-grY and D-D three-phase step-down transformer configurations are accepted
@@ -41,28 +41,30 @@ distributed_generation.csv | optional | bus,conn,mode,kw_set,<br />kvar_set,kv_s
 
 ***For grid's topology discovery only***: `gridtopology()`
 
-options | purpose | default | examples
+options | type | default | purpose/examples
 --- | --- | :-: | --- 
-input = "String"  | input files location  | "" <br />(pwd) | _gridtopology(input = "examples/ieee-34")_
-output = "String" | results files location |"" <br />(pwd) | _gridtopology(output = "results")_
-display_topology = bool | display in screen the identified grid topology| false | _gridtopology(display_topology = true)_
-timestamp = bool | add a timestamp to results file names  | false | _gridtopology(timestamp = true)_
-graph_title = "String" | set a title in topology graph | "" (nothing)| _gridtopology(graph_title = "modified ieee-34 test feeder")_
-marker_size = Float    | set the size of bus identifier in graph | 1.5 | _gridtopology(marker_size = 10)_
+input | String | "" <br />(pwd) | input files location <br/> _gridtopology(input = "examples/ieee-34")_
+output | String |"" <br />(pwd) | results files location<br/> _gridtopology(output = "results")_
+display_topology | Bool | false | display in screen the identified grid topology<br/> _gridtopology(display_topology = true)_
+timestamp | Bool | false | add a timestamp to results file names <br/>  _gridtopology(timestamp = true)_
+graph_title | String  | "" (nothing)| set a title in topology graph <br/> _gridtopology(graph_title = "modified ieee-34 test feeder")_
+marker_size | Float  | 1.5 | set the size of bus identifier in graph<br/>  _gridtopology(marker_size = 10)_
+verbose   | Int  | 0 |  set the level of program verbosity (currently 0 or 1) <br /> _powerflow(verbose = 1)_
 
 ***For powerflow analysis***: `powerflow()`
 
-options | purpose | default | examples
+options | type | default | purpose/examples
 --- | --- | :---: | --- 
-input = "String"   | input files location  | "" <br />(pwd) | _powerflow(input = "examples/ieee-34")_
-output = "String"  | results files location |"" <br />(pwd) | _powerflow(output = "results")_
-tolerance = Float  | maximum porcentual difference between calculated and nominal substation bus voltage  | 1e-6 | _powerflow(tolerance = 0.001)_
-max_iteration = Int | maximum number of iteration before procedure halt | 30 | _powerflow(max_iteration = 100)_
-display_results = bool | display in terminal bus voltage results | true | _powerflow(display_results = false)_
-display_topology = bool | display in screen the identified grid topology | false | _powerflow(display_topology = true)_
-timestamp = bol | add a timestamp to results file names | false | _powerflow(timestamp = true)_
-graph_title = "String" | set a title in topology graph | "" (nothing)| _powerflow(graph_title = "modified ieee-34 test feeder")_
-marker_size = Float    | set the size of bus identifier in graph | 1.5 | _powerflow(marker_size = 10)_
+input    | String  | "" <br />(pwd) | input files location <br /> _powerflow(input = "examples/ieee-34")_
+output   | String  |"" <br />(pwd) | results files location <br /> _powerflow(output = "results")_
+tolerance  | Float  | 1e-6 | maximum porcentual difference between calculated and nominal substation bus voltage <br /> _powerflow(tolerance = 0.001)_
+max_iteration | Int  | 30 | maximum number of iteration before procedure halt <br />_powerflow(max_iteration = 100)_
+display_results | Bool | true | display in terminal bus voltage results <br /> _powerflow(display_results = false)_
+display_topology | Bool | false | display in screen the identified grid topology <br/> _powerflow(display_topology = true)_
+timestamp  | Bool | false |add a timestamp to results file names <br /> _powerflow(timestamp = true)_
+graph_title  | String | "" (nothing)| set a title in topology graph <br /> _powerflow(graph_title = "modified ieee-34 test feeder")_
+marker_size    | Float  | 1.5 |  set the size of bus identifier in graph <br /> _powerflow(marker_size = 10)_
+verbose   | Int  | 0 |  set the level of program verbosity (currently 0 or 1) <br /> _powerflow(verbose = 1)_
 
 
 ## Examples

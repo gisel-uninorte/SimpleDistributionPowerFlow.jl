@@ -32,7 +32,7 @@ function directory_check(dir,type)
     return dir,err_msg
 end
 
-function read_input_files(input_directory, caller)
+function read_input_files(input_directory, caller, verbose)
     #generated variables
     global bus_coords
     global distributed_gen
@@ -216,7 +216,9 @@ function read_input_files(input_directory, caller)
         else has_distributed_load = true
         end
     else 
-        println("no distributed loads")
+        if !(verbose == 0)
+            println("no distributed loads")
+        end
         err_msg = ""
     end 
 
@@ -242,7 +244,9 @@ function read_input_files(input_directory, caller)
             else has_capacitor = true
             end
         else 
-            println("no capacitors")
+            if !(verbose == 0)
+                println("no capacitors")
+            end
             err_msg = ""
         end 
         
@@ -254,9 +258,9 @@ function read_input_files(input_directory, caller)
                 return err_msg
             else
                 distributed_gen.mode = uppercase.(distributed_gen.mode)
-                modes = filter(row -> !(row.mode in("PQ","WPQ","PQV","PV","PI")),distributed_gen)
+                modes = filter(row -> !(row.mode in("PQ","PQV","PI")),distributed_gen)
                 if !(nrow(modes) == 0)
-                    err_msg = "modes of Distributed Generation accepted: PQ (traditional constant watt-var), wPQ (weighted PQ), PQV (volt dependant var PQ), PV (volt-var control), PI (constant watt-ampere)"
+                    err_msg = "modes of Distributed Generation accepted: PQ (traditional constant watt-var), PQV (volt dependant var PQ), PI (constant watt-ampere)"
                     return err_msg
                 end
             end
@@ -267,11 +271,15 @@ function read_input_files(input_directory, caller)
             if !(nrow(distributed_gen) == 0)
                 has_distributed_gen = true
             else
-                println("no distributed generation")
+                if !(verbose == 0)
+                    println("no distributed generation")
+                end
                 err_msg = ""
             end            
         else 
-            println("no distributed generation")
+            if !(verbose == 0)
+                println("no distributed generation")
+            end
             err_msg = ""
         end 
     end
