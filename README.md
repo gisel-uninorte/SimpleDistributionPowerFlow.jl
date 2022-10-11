@@ -39,19 +39,19 @@ distributed_generation.csv | optional | bus,conn,mode,kw_set,<br />kvar_set,kv_s
 
 ***For grid's topology discovery only***: `gridtopology()`
 
-options | type | default | purpose/examples
+options | type | default | purpose/example
 --- | --- | :-: | --- 
 input | String | "" <br />(pwd) | input files location <br/> _gridtopology(input = "examples/ieee-34")_
 output | String |"" <br />(pwd) | results files location<br/> _gridtopology(output = "results")_
 display_topology | Bool | false | display in screen the identified grid topology<br/> _gridtopology(display_topology = true)_
 timestamp | Bool | false | add a timestamp to results file names <br/>  _gridtopology(timestamp = true)_
-graph_title | String  | "" (nothing)| set a title in topology graph <br/> _gridtopology(graph_title = "modified ieee-34 test feeder")_
+graph_title | String  | "" <br />(nothing)| set a title in topology graph <br/> _gridtopology(graph_title = "modified ieee-34 test feeder")_
 marker_size | Float  | 1.5 | set the size of bus identifier in graph<br/>  _gridtopology(marker_size = 10)_
 verbose   | Int  | 0 |  set the level of program verbosity (currently 0 or 1) <br /> _powerflow(verbose = 1)_
 
 ***For powerflow analysis***: `powerflow()`
 
-options | type | default | purpose/examples
+options | type | default | purpose/example
 --- | --- | :---: | --- 
 input    | String  | "" <br />(pwd) | input files location <br /> _powerflow(input = "examples/ieee-34")_
 output   | String  |"" <br />(pwd) | results files location <br /> _powerflow(output = "results")_
