@@ -21,14 +21,17 @@ julia> powerflow(input="examples/ieee-13", output="results", graph_title="IEEE 1
 
 In this example there is a bus_coords.csv file for this reason the relative location of the buses in the graph are maintained.
 
-In the working topology a bus was added to model the distributed load between buses 632 and 671. This auxiliar bus will be deleted after powerflow execution and before the results were printed.
+For working topology a bus was added automatically to model the distributed load between buses 632 and 671. This auxiliar bus will be deleted automatically after powerflow execution and before the results were printed.
 
 More explanations on specific command arguments can be found in [ieee-4](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-4) example. 
 
 ## For Distributed Generation
-To execute powerflow with DG you only need to change the name of the first file to distributed_generation.csv (eliminating the first underscore sign in the example file).
+To execute powerflow with DG rename the example file to distributed_generation.csv (removing the first underscore sign) and run the command:
+```julia
+julia> powerflow(input="examples/ieee-13", output="results")
+```
 
-The example has different DG at buses 634 (PQ), 671 (PQV) and 675 (PI), connected in wye or delta. The following table shows the required values for the specific DG mode. Value of xd is in ohm.
+The example has different DGs at buses 634 (PQ), 671 (PQV) and 675 (PI), connected in wye or delta. The following table shows the required values for the specific DG mode. Value of xd is in ohm.
 
 bus | conn | mode | kw_set | kvar_set | kv_set | amp_set | kvar_min | kvar_max | xd
 --- | ---  | ---  | ---    | ---      | ---    | ---     | ---      | ---      | ---
