@@ -19,7 +19,9 @@ julia> powerflow(input="examples/ieee-13", output="results", graph_title="IEEE 1
   </tr>
 </table>
 
-In this example there is a bus_coords.csv file for this reason the relative location of the buses in the graph are maintained.
+In this example bus 60 was added to connect the regulator between bus 650 and the line connecting to bus 632. 
+
+There is a bus_coords.csv file in input directory for this reason the relative location of the buses in topology graphs are maintained.
 
 For working topology a bus was added automatically to model the distributed load between buses 632 and 671. This auxiliar bus will be deleted automatically after powerflow execution and before the results were printed.
 
