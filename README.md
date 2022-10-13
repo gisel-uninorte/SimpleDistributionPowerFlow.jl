@@ -57,7 +57,7 @@ input    | String  | "" <br />(pwd) | input files location <br /> _powerflow(inp
 output   | String  |"" <br />(pwd) | results files location <br /> _powerflow(output = "results")_
 tolerance  | Float  | 1e-6 | maximum porcentual difference between calculated and nominal substation bus voltage <br /> _powerflow(tolerance = 0.001)_
 max_iteration | Int  | 30 | maximum number of iteration before procedure halt <br />_powerflow(max_iteration = 100)_
-display_results | Bool | true | display in terminal bus voltage results <br /> _powerflow(display_results = false)_
+display_results | Bool | true | display in screen bus voltage results <br /> _powerflow(display_results = false)_
 display_topology | Bool | false | display in screen the identified grid topology <br/> _powerflow(display_topology = true)_
 timestamp  | Bool | false |add a timestamp to results file names <br /> _powerflow(timestamp = true)_
 graph_title  | String | "" (nothing)| set a title in topology graph <br /> _powerflow(graph_title = "modified ieee-34 test feeder")_
