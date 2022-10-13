@@ -21,7 +21,7 @@ julia> powerflow(input="examples/ieee-34", output="results", graph_title="IEEE 3
 
 In this example a bus and a regulator were added in configuration files to model the voltage rise in bus 800. 
 
-In the working topology several buses were automatically added to model the distributed loads.
+For working topology several buses were automatically added to model the distributed loads, these auxiliary buses will be removed automatically before print the results.
 
 More explanations on specific command arguments can be found in [ieee-4](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-4) example. 
 
