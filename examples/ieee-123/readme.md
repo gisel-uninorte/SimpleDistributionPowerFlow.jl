@@ -21,7 +21,7 @@ julia> powerflow(input="examples/ieee-123", output="results", graph_title="IEEE 
 
 In this case some auxiliar buses were added in configuration files to connect the voltage regulators to their respective lines. 
 
-In the working topology several buses were automatically added to model the distributed loads. Buses 195, 251, 350 and 451 were automatically pruned because the associated switches were in open state.
+For working topology buses 195, 251, 350 and 451 were automatically pruned because the associated switches were in open state.
 
 More explanations on specific command arguments can be found in [ieee-4](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-4) example. 
 
