@@ -33,8 +33,6 @@ function data_preparation()
     global pqv_distributed_gen = DataFrame()
     global has_pi_distributed_gen = false
     global pi_distributed_gen = DataFrame()
-    global has_pv_distributed_gen = false
-    global pv_distributed_gen = DataFrame()
     global generation_register = DataFrame()
 
     working_lines()
@@ -80,9 +78,10 @@ function data_preparation()
     end
 
     for m = 1:nrow(lines)
-        if lines[m,:type] == 1 #line segment type
+        #line impedance matrix construction
+        if lines[m,:type] == 1 
             for k = 1:nrow(line_configs)
-                if line_configs[k,:config] == lines[m,:config] #multiplica por la distancia convertida de pies a millas y arma el complejo de Zii
+                if line_configs[k,:config] == lines[m,:config] 
                     if lines[m,:unit] == "ft" && line_configs[k,:unit] == "mi"; factor = 1/5280
                     elseif lines[m,:unit] == "m" && line_configs[k,:unit] == "km"; factor = 1/1000
                     elseif lines[m,:unit] == "m" && line_configs[k,:unit] == "mi"; factor = 1/1609.344
@@ -125,7 +124,9 @@ function data_preparation()
                 end
             end
         end
-        if lines[m,:type] == 2 #transformer segment type
+        
+        #transformer impedance matrix construction
+        if lines[m,:type] == 2
             transformer = filter(row -> row.config == lines[m,:config], transformers) 
             lines[m,:Zaa] = transformer[1,:Zt]
             lines[m,:Zab] = 0
@@ -141,7 +142,9 @@ function data_preparation()
             lines[m,:Bcc] = 0
             lines[m,:phases] = transformer[1,:phases]
         end
-        if lines[m,:type] == 3 #switch segment type
+        
+        #switch impedance matrix construction
+        if lines[m,:type] == 3 
             switch = filter(row -> row.config == lines[m,:config], switches)
             if switch[1,:state] == "CLOSED"
                 lines[m,:Zaa] = switch[1,:resistance]
@@ -163,7 +166,9 @@ function data_preparation()
             lines[m,:Bcc] = 0
             lines[m,:phases] = switch[1,:phases]
         end
-        if lines[m,:type] == 4 #regulator segment type
+        
+        #regulator impedance matrix construction
+        if lines[m,:type] == 4 
             regulator = filter(row -> row.config == lines[m,:config], regulators)
             lines[m,:Zaa] = 0
             lines[m,:Zab] = 0
@@ -181,7 +186,7 @@ function data_preparation()
         end
     end
 
-    #constructing generalized matrices (kersting 4ed, ch. 6) 
+    #generalized matrix construction (kersting 4ed, ch. 6) 
     gen_lines_mat = select(lines, [:bus1,:bus2])
     gen_lines_mat = [gen_lines_mat DataFrame(Matrix{Union{Complex, Nothing}}(nothing, nrow(lines),9),[:a_1_1,:a_1_2,:a_1_3,:a_2_1,:a_2_2,:a_2_3,:a_3_1,:a_3_2,:a_3_3,])]
     gen_lines_mat = [gen_lines_mat DataFrame(Matrix{Union{Complex, Nothing}}(nothing, nrow(lines),9),[:b_1_1,:b_1_2,:b_1_3,:b_2_1,:b_2_2,:b_2_3,:b_3_1,:b_3_2,:b_3_3,])]
@@ -216,7 +221,8 @@ function data_preparation()
         y_line[3,2] = lines[m,:Bbc]
         y_line[3,3] = lines[m,:Bcc]
 
-        if lines[m,:type] == 1 || lines[m,:type] == 3 #line or switch type segment
+        #line or switch segments
+        if lines[m,:type] == 1 || lines[m,:type] == 3
             a = U + 0.5*z_line*y_line
             b = z_line
             c = y_line + 0.25*y_line*z_line*y_line
@@ -225,7 +231,8 @@ function data_preparation()
             B = A*b
         end
 
-        if lines[m,:type] == 2 #transformer type segment
+        #transformer segments
+        if lines[m,:type] == 2 
             transformer = filter(row -> row.config == lines[m,:config], transformers)
             if (transformer[1,:conn_high] == "GRY" && transformer[1,:conn_low] == "GRY") ||  (transformer[1,:conn_high] == "D" && transformer[1,:conn_low] == "D")  #grounded_wye-grounded_wye or delta-delta transformer
                 nt = transformer[1,:kv_high]/transformer[1,:kv_low]
@@ -256,7 +263,8 @@ function data_preparation()
             end
         end
 
-        if lines[m,:type] == 4 #regulator type segment
+        #regulator segments
+        if lines[m,:type] == 4 
             regulator = filter(row -> row.config == lines[m,:config], regulators)
             if regulator[1,:mode] == "MANUAL"
                 a = [1/(1 + 0.00625*regulator[1,:tap_1]) 0 0; 0 1/(1 + 0.00625*regulator[1,:tap_2]) 0; 0 0 1/(1 + 0.00625*regulator[1,:tap_3])]
@@ -357,7 +365,7 @@ function data_preparation()
         end
     end
 
-    #adding capacitors as negative imaginary loads
+    #adding capacitors as negative reactive loads
     for k = 1:nrow(input_capacitors)
         for n = 1:nrow(working_buses)
             if input_capacitors[k,:bus] == working_buses[n,:id]
@@ -450,45 +458,16 @@ function data_preparation()
             has_pi_distributed_gen = true
         end
 
-        #=pending models (also pendig PQ(v) async generator based, and specific photovoltaic model with curves)
-        pv_distributed_gen = filter(row -> row.mode == "PV",distributed_gen)
-        if !(nrow(pv_distributed_gen) == nrow(dropmissing(dropmissing(dropmissing(dropmissing(pv_distributed_gen,:kw_set),:kv_set),:kvar_min),:kvar_max)))
-            println("PV distributed generation register with missing values, it will be ignored.")
-            dropmissing!(dropmissing!(dropmissing!(dropmissing!(pv_distributed_gen,:kw_set),:kv_set),:kvar_min),:kvar_max)
-        end
-        if nrow(filter(row -> !(row.bus in working_buses[!,:id]), pv_distributed_gen)) > 0
-            println("PV distributed generation at non-existent bus, it will be ignored.")
-            pv_distributed_gen = filter(row -> row.bus in working_buses[!,:id], pv_distributed_gen)
-        end  
-        if !(nrow(pv_distributed_gen) == 0) 
-            for n = 1:nrow(pv_distributed_gen)
-                p_phase = pv_distributed_gen[n,:kw_set]*1000/3
-                q_phase = (pv_distributed_gen[n,:kvar_min] + pv_distributed_gen[n,:kvar_max])*1000/6
-                s_phase =  (p_phase + q_phase*1im)
-                push!(loads,(pv_distributed_gen[n,:bus],pv_distributed_gen[n,:conn],pv_distributed_gen[n,:mode],
-                                -s_phase, -s_phase, -s_phase))
-                push!(generation_register, (pv_distributed_gen[n,:bus], pv_distributed_gen[n,:mode], pv_distributed_gen[n,:conn],
-                                            pv_distributed_gen[n,:kw_set]/3, (pv_distributed_gen[n,:kvar_min] + pv_distributed_gen[n,:kvar_max])/3,
-                                            pv_distributed_gen[n,:kw_set]/3, (pv_distributed_gen[n,:kvar_min] + pv_distributed_gen[n,:kvar_max])/3,
-                                            pv_distributed_gen[n,:kw_set]/3, (pv_distributed_gen[n,:kvar_min] + pv_distributed_gen[n,:kvar_max])/3, 0))
-            end
-            select!(pi_distributed_gen,[:bus, :conn, :mode, :kw_set, :kv_set, :kvar_min, :kvar_max])
-            pv_distributed_gen = [pv_distributed_gen DataFrame(zeros(nrow(pi_distributed_gen),4),[:v_ph1,:v_ph2,:v_ph3,:max_diff])]
-            pv_distributed_gen = [pv_distributed_gen DataFrame(zeros(nrow(pi_distributed_gen),6),[:kw_ph1 ,:kw_ph2,:kw_ph3,:kvar_ph1,:kvar_ph2,:kvar_ph3])]
-            has_pv_distributed_gen = true
-        end
-        =#
-
         #checking dg
         if !(has_pq_distributed_gen || has_pqv_distributed_gen || has_pi_distributed_gen)
             has_distributed_gen = false   
         end
     end
 
-    #adding constants to loads
+    #adding columns to loads dataframe for constants
     loads = [loads DataFrame(Matrix{Union{Complex,Nothing}}(nothing,nrow(loads),3),[:k_1,:k_2,:k_3])]
 
-    #Calcula los valores constantes de acuerdo al tipo de carga
+    #calculate constants for constant Z and I load types
     for k = 1:nrow(loads)
         if loads[k,:type] == "Z" || loads[k,:type] == "I"
             for n = 1:nrow(working_buses)
@@ -505,34 +484,34 @@ function data_preparation()
                 if loads[k,:ph_1] == 0
                     loads[k,:k_1] = 0
                 else
-                    loads[k,:k_1] = (vnom^2/abs(loads[k,:ph_1]))*exp(angle(loads[k,:ph_1])im) #Zcte F1
+                    loads[k,:k_1] = (vnom^2/abs(loads[k,:ph_1]))*exp(angle(loads[k,:ph_1])im) #Z ph1
                 end
-                if loads[k,:ph_2] == 0 #no tiene carga en fase-2
+                if loads[k,:ph_2] == 0 
                     loads[k,:k_2] = 0
                 else
-                    loads[k,:k_2] = (vnom^2/abs(loads[k,:ph_2]))*exp(angle(loads[k,:ph_2])im) #Zcte F2
+                    loads[k,:k_2] = (vnom^2/abs(loads[k,:ph_2]))*exp(angle(loads[k,:ph_2])im) #Z ph2
                 end
-                if loads[k,:ph_3] == 0 #no tiene carga en fase-3
+                if loads[k,:ph_3] == 0 
                     loads[k,:k_3] = 0
                 else
-                    loads[k,:k_3] = (vnom^2/abs(loads[k,:ph_3]))*exp(angle(loads[k,:ph_3])im) #Zcte F3
+                    loads[k,:k_3] = (vnom^2/abs(loads[k,:ph_3]))*exp(angle(loads[k,:ph_3])im) #Z ph3
                 end
             end
             if loads[k,:type] == "I"
                 if loads[k,:ph_1] == 0
                     loads[k,:k_1] = 0
                 else
-                    loads[k,:k_1] = abs(loads[k,:ph_1])/vnom #Zcte F1
+                    loads[k,:k_1] = abs(loads[k,:ph_1])/vnom #Amp ph1
                 end
-                if loads[k,:ph_2] == 0 #no tiene carga en fase-2
+                if loads[k,:ph_2] == 0 
                     loads[k,:k_2] = 0
                 else
-                    loads[k,:k_2] = abs(loads[k,:ph_2])/vnom #Zcte F2
+                    loads[k,:k_2] = abs(loads[k,:ph_2])/vnom #Amp ph2
                 end
-                if loads[k,:ph_3] == 0 #no tiene carga en fase-3
+                if loads[k,:ph_3] == 0 
                     loads[k,:k_3] = 0
                 else
-                    loads[k,:k_3] = abs(loads[k,:ph_3])/vnom #Zcte F3
+                    loads[k,:k_3] = abs(loads[k,:ph_3])/vnom #Amp ph3
                 end
             end
         end
@@ -557,7 +536,7 @@ function data_preparation()
         lines[m,:ibus1_3] = 0
     end
  
-    #Vectores de tensiones y corrientes temporales
+    #temporal containers for bus voltage and current 
     Vbus1 = Complex{Float64}[0;0;0]
     Vbus2 = Complex{Float64}[0;0;0]
     Ibus1 = Complex{Float64}[0;0;0]
@@ -594,7 +573,7 @@ function working_lines()
         end
         if has_regulator
             if lines[m,:config] in regulators[:,:config]
-                lines[m,:type] = 4 #inline regulator
+                lines[m,:type] = 4 #regulator
             end
         end
     end

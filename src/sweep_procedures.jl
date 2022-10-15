@@ -118,23 +118,23 @@ function backwardsweep()
     Iphase =  Complex{Float64}[0;0;0]
     DL = [1 0 -1; -1 1 0; 0 -1 1]
 
-    #establece las corrientes en cero
+    #set currents to cero
     working_buses[:,:ibus_1] .= 0
     working_buses[:,:ibus_2] .= 0
     working_buses[:,:ibus_3] .= 0
 
-    #Calculo de las corrientes propias de los nodos finales
+    #ending buses current calculation
     for n = 1:nrow(working_buses)
         if working_buses[n,:type] == 5
             for k = 1:nrow(loads)
                 if loads[k,:bus] == working_buses[n,:id]
-                    if loads[k,:conn] == "Y" #Estrella
-                        if loads[k,:type] == "PQ" || loads[k,:type] == "WPQ" || loads[k,:type] == "PQV" || loads[k,:type] == "PI"
+                    if loads[k,:conn] == "Y" 
+                        if loads[k,:type] == "PQ" || loads[k,:type] == "PQV" || loads[k,:type] == "PI"
                             working_buses[n,:ibus_1] += conj(loads[k,:ph_1]./working_buses[n,:v_ph1])
                             working_buses[n,:ibus_2] += conj(loads[k,:ph_2]./working_buses[n,:v_ph2])
                             working_buses[n,:ibus_3] += conj(loads[k,:ph_3]./working_buses[n,:v_ph3])
                         end
-                        if loads[k,:type] == "Z" #Zcte
+                        if loads[k,:type] == "Z" 
                             if !(loads[k,:k_1] == 0)
                                 working_buses[n,:ibus_1] +=  working_buses[n,:v_ph1]./loads[k,:k_1]
                             end
@@ -145,45 +145,55 @@ function backwardsweep()
                                 working_buses[n,:ibus_3] += working_buses[n,:v_ph3]./loads[k,:k_3]
                             end
                         end
-                        if loads[k,:type] == "I" #Icte
-                            working_buses[n,:ibus_1] +=  abs(loads[k,:k_1])*exp((angle(working_buses[n,:v_ph1])-angle(loads[k,:ph_1]))im)
+                        if loads[k,:type] == "I" 
+                            working_buses[n,:ibus_1] += abs(loads[k,:k_1])*exp((angle(working_buses[n,:v_ph1])-angle(loads[k,:ph_1]))im)
                             working_buses[n,:ibus_2] += abs(loads[k,:k_2])*exp((angle(working_buses[n,:v_ph2])-angle(loads[k,:ph_2]))im)
                             working_buses[n,:ibus_3] += abs(loads[k,:k_3])*exp((angle(working_buses[n,:v_ph3])-angle(loads[k,:ph_3]))im)
                         end
                     end
-                    if loads[k,:conn] == "D" #Delta
-                        if loads[k,:type] == "PQ" || loads[k,:type] == "WPQ" || loads[k,:type] == "PQV" || loads[k,:type] == "PI"
-                            Iline[1,1] = conj(loads[k,:ph_1]/(working_buses[n,:v_ph1]-working_buses[n,:v_ph2]))
-                            Iline[2,1] = conj(loads[k,:ph_2]/(working_buses[n,:v_ph2]-working_buses[n,:v_ph3]))
-                            Iline[3,1] = conj(loads[k,:ph_3]/(working_buses[n,:v_ph3]-working_buses[n,:v_ph1]))
+                    if loads[k,:conn] == "D" 
+                        if loads[k,:type] == "PQ" || loads[k,:type] == "PQV" || loads[k,:type] == "PI"
+                            Iphase[1,1] = conj(loads[k,:ph_1]/(working_buses[n,:v_ph1]-working_buses[n,:v_ph2]))
+                            Iphase[2,1] = conj(loads[k,:ph_2]/(working_buses[n,:v_ph2]-working_buses[n,:v_ph3]))
+                            Iphase[3,1] = conj(loads[k,:ph_3]/(working_buses[n,:v_ph3]-working_buses[n,:v_ph1]))
                         end
-                        if loads[k,:type] == "Z" #Zcte
+                        if loads[k,:type] == "Z" 
                             if !(loads[k,:k_1] == 0)
-                                Iline[1,1] = (working_buses[n,:v_ph1]-working_buses[n,:v_ph2])./loads[k,:k_1]
+                                Iphase[1,1] = (working_buses[n,:v_ph1]-working_buses[n,:v_ph2])./loads[k,:k_1]
                             end
                             if !(loads[k,:k_2] == 0)
-                                Iline[2,1] = (working_buses[n,:v_ph2]-working_buses[n,:v_ph3])/loads[k,:k_2]
+                                Iphase[2,1] = (working_buses[n,:v_ph2]-working_buses[n,:v_ph3])/loads[k,:k_2]
                             end
                             if !(loads[k,:k_3] == 0)
-                                Iline[3,1] = (working_buses[n,:v_ph3]-working_buses[n,:v_ph1])./loads[k,:k_3]
+                                Iphase[3,1] = (working_buses[n,:v_ph3]-working_buses[n,:v_ph1])./loads[k,:k_3]
                             end
                         end
-                        if loads[k,:type] == "I" #Icte
-                            Iline[1,1] = abs(loads[k,:k_1])exp((angle(working_buses[n,:v_ph1]-working_buses[n,:v_ph2])-angle(loads[k,:ph_1]))im)
-                            Iline[2,1] = abs(loads[k,:k_2])exp((angle(working_buses[n,:v_ph2]-working_buses[n,:v_ph3])-angle(loads[k,:ph_2]))im)
-                            Iline[3,1] = abs(loads[k,:k_3])exp((angle(working_buses[n,:v_ph3]-working_buses[n,:v_ph1])-angle(loads[k,:ph_3]))im)
+                        if loads[k,:type] == "I" 
+                            Iphase[1,1] = abs(loads[k,:k_1])exp((angle(working_buses[n,:v_ph1]-working_buses[n,:v_ph2])-angle(loads[k,:ph_1]))im)
+                            Iphase[2,1] = abs(loads[k,:k_2])exp((angle(working_buses[n,:v_ph2]-working_buses[n,:v_ph3])-angle(loads[k,:ph_2]))im)
+                            Iphase[3,1] = abs(loads[k,:k_3])exp((angle(working_buses[n,:v_ph3]-working_buses[n,:v_ph1])-angle(loads[k,:ph_3]))im)
                         end
-                        Iphase = DL*Iline; #Kersting Eq. 9.15
-                        working_buses[n,:ibus_1] +=  Iphase[1,1]
-                        working_buses[n,:ibus_2] += Iphase[2,1]
-                        working_buses[n,:ibus_3] += Iphase[3,1]
+                        Iline = DL*Iphase
+                        working_buses[n,:ibus_1] += Iline[1,1]
+                        working_buses[n,:ibus_2] += Iline[2,1]
+                        working_buses[n,:ibus_3] += Iline[3,1]
+                        Iline[1,1] = 0+0im
+                        Iline[2,1] = 0+0im
+                        Iline[3,1] = 0+0im
+                        Iphase[1,1] = 0+0im
+                        Iphase[2,1] = 0+0im
+                        Iphase[3,1] = 0+0im
+                        #=
+                        Iline = [0+0im; 0+0im; 0+0im]
+                        Iphase = [0+0im; 0+0im; 0+0im]
+                        =#
                     end
                 end
             end
             working_buses[n,:process] = 2
         end
     end
-    #Calcula las tensiones y corrientes de los nodos siguientes
+    #non-ending buses current calculation
     for n = 1:nrow(working_buses)
         if !(working_buses[n,:type] == 5)
             for m = 1:nrow(gen_lines_mat)
@@ -233,20 +243,20 @@ function backwardsweep()
                             Vbus2 = [working_buses[n2,:v_ph1]; working_buses[n2,:v_ph2]; working_buses[n2,:v_ph3]]
                             Ibus2 = [working_buses[n2,:ibus_1]; working_buses[n2,:ibus_2]; working_buses[n2,:ibus_3]]            
 
-                            Vbus1 = a*Vbus2 + b*Ibus2 #tension nodo a del segmento de linea
-                            Ibus1 = c*Vbus2 + d*Ibus2 #corriente entre el nodo a y el b
+                            Vbus1 = a*Vbus2 + b*Ibus2 
+                            Ibus1 = c*Vbus2 + d*Ibus2 
 
-                            #guardando las tensiones de nodos
+                            #storing bus voltages
                             working_buses[n,:v_ph1] = Vbus1[1,1]
                             working_buses[n,:v_ph2] = Vbus1[2,1]
                             working_buses[n,:v_ph3] = Vbus1[3,1]
 
-                            #sumando corrientes de linea en los nodos
-                            working_buses[n,:ibus_1] +=  Ibus1[1,1]
+                            #bus line currents aggregation
+                            working_buses[n,:ibus_1] += Ibus1[1,1]
                             working_buses[n,:ibus_2] += Ibus1[2,1]
                             working_buses[n,:ibus_3] += Ibus1[3,1]
 
-                            #guardando las corrientes de linea
+                            #storing line currents
                             lines[m,:ibus1_1] =  Ibus1[1,1]
                             lines[m,:ibus1_2] =  Ibus1[2,1]
                             lines[m,:ibus1_3] =  Ibus1[3,1]
@@ -256,16 +266,16 @@ function backwardsweep()
                     end
                 end
             end
-            #sumar corrientes propias de los nodos
+            #bus local currents aggregation
             for k = 1:nrow(loads)
                 if loads[k,:bus] == working_buses[n,:id]
-                    if loads[k,:conn] == "Y" #Estrella_nominal
-                        if loads[k,:type] == "PQ" || loads[k,:type] == "WPQ" || loads[k,:type] == "PQV" || loads[k,:type] == "PI"
+                    if loads[k,:conn] == "Y" 
+                        if loads[k,:type] == "PQ" || loads[k,:type] == "PQV" || loads[k,:type] == "PI"
                             working_buses[n,:ibus_1] +=  conj(loads[k,:ph_1]./working_buses[n,:v_ph1])
                             working_buses[n,:ibus_2] += conj(loads[k,:ph_2]./working_buses[n,:v_ph2])
                             working_buses[n,:ibus_3] += conj(loads[k,:ph_3]./working_buses[n,:v_ph3])
                         end
-                        if loads[k,:type] == "Z" #Zcte
+                        if loads[k,:type] == "Z"
                             if !(loads[k,:k_1] == 0)
                                 working_buses[n,:ibus_1] +=  working_buses[n,:v_ph1]./loads[k,:k_1]
                             end
@@ -276,39 +286,48 @@ function backwardsweep()
                                 working_buses[n,:ibus_3] += working_buses[n,:v_ph3]./loads[k,:k_3]
                             end
                         end
-                        if loads[k,:type] == "I" #Icte
+                        if loads[k,:type] == "I"
                             working_buses[n,:ibus_1] +=  abs(loads[k,:k_1])exp((angle(working_buses[n,:v_ph1])-angle(loads[k,:ph_1]))im)
                             working_buses[n,:ibus_2] += abs(loads[k,:k_2])exp((angle(working_buses[n,:v_ph2])-angle(loads[k,:ph_2]))im)
                             working_buses[n,:ibus_3] += abs(loads[k,:k_3])exp((angle(working_buses[n,:v_ph3])-angle(loads[k,:ph_3]))im)
                         end
                     end
-                    if loads[k,:conn] == "D" #Delta
-                        if loads[k,:type] == "PQ" || loads[k,:type] == "WPQ" || loads[k,:type] == "PQV" || loads[k,:type] == "PI"
-                            Iline[1,1] = conj(loads[k,:ph_1]/(working_buses[n,:v_ph1]-working_buses[n,:v_ph2]))
-                            Iline[2,1] = conj(loads[k,:ph_2]/(working_buses[n,:v_ph2]-working_buses[n,:v_ph3]))
-                            Iline[3,1] = conj(loads[k,:ph_3]/(working_buses[n,:v_ph3]-working_buses[n,:v_ph1]))
+                    if loads[k,:conn] == "D"
+                        if loads[k,:type] == "PQ" || loads[k,:type] == "PQV" || loads[k,:type] == "PI"
+                            Iphase[1,1] = conj(loads[k,:ph_1]/(working_buses[n,:v_ph1]-working_buses[n,:v_ph2]))
+                            Iphase[2,1] = conj(loads[k,:ph_2]/(working_buses[n,:v_ph2]-working_buses[n,:v_ph3]))
+                            Iphase[3,1] = conj(loads[k,:ph_3]/(working_buses[n,:v_ph3]-working_buses[n,:v_ph1]))
                         end
-                        if loads[k,:type] == "Z" #Zcte
+                        if loads[k,:type] == "Z"
                             if !(loads[k,:k_1] == 0)
-                                Iline[1,1] = (working_buses[n,:v_ph1]-working_buses[n,:v_ph2])./loads[k,:k_1]
+                                Iphase[1,1] = (working_buses[n,:v_ph1]-working_buses[n,:v_ph2])./loads[k,:k_1]
                             end
                             if !(loads[k,:k_2] == 0)
-                                Iline[2,1] = (working_buses[n,:v_ph2]-working_buses[n,:v_ph3])./loads[k,:k_2]
+                                Iphase[2,1] = (working_buses[n,:v_ph2]-working_buses[n,:v_ph3])./loads[k,:k_2]
                             end
                             if !(loads[k,:k_3] == 0)
-                                Iline[3,1] = (working_buses[n,:v_ph3]-working_buses[n,:v_ph1])./loads[k,:k_3]
+                                Iphase[3,1] = (working_buses[n,:v_ph3]-working_buses[n,:v_ph1])./loads[k,:k_3]
                             end
                         end
-                        if loads[k,:type] == "I" #Icte
-                            Iline[1,1] = abs(loads[k,:k_1])exp((angle(working_buses[n,:v_ph1]-working_buses[n,:v_ph2])-angle(loads[k,:ph_1]))im)
-                            Iline[2,1] = abs(loads[k,:k_2])exp((angle(working_buses[n,:v_ph2]-working_buses[n,:v_ph3])-angle(loads[k,:ph_2]))im)
-                            Iline[3,1] = abs(loads[k,:k_3])exp((angle(working_buses[n,:v_ph3]-working_buses[n,:v_ph1])-angle(loads[k,:ph_3]))im)
+                        if loads[k,:type] == "I"
+                            Iphase[1,1] = abs(loads[k,:k_1])exp((angle(working_buses[n,:v_ph1]-working_buses[n,:v_ph2])-angle(loads[k,:ph_1]))im)
+                            Iphase[2,1] = abs(loads[k,:k_2])exp((angle(working_buses[n,:v_ph2]-working_buses[n,:v_ph3])-angle(loads[k,:ph_2]))im)
+                            Iphase[3,1] = abs(loads[k,:k_3])exp((angle(working_buses[n,:v_ph3]-working_buses[n,:v_ph1])-angle(loads[k,:ph_3]))im)
                         end
-                        Iphase = DL*Iline #Kersting Eq. 9.15
-
-                        working_buses[n,:ibus_1] +=  Iphase[1,1]
-                        working_buses[n,:ibus_2] += Iphase[2,1]
-                        working_buses[n,:ibus_3] += Iphase[3,1]
+                        Iline = DL*Iphase
+                        working_buses[n,:ibus_1] += Iline[1,1]
+                        working_buses[n,:ibus_2] += Iline[2,1]
+                        working_buses[n,:ibus_3] += Iline[3,1]
+                        Iline[1,1] = 0+0im
+                        Iline[2,1] = 0+0im
+                        Iline[3,1] = 0+0im
+                        Iphase[1,1] = 0+0im
+                        Iphase[2,1] = 0+0im
+                        Iphase[3,1] = 0+0im
+                        #=
+                        Iline = [0+0im; 0+0im; 0+0im]
+                        Iphase = [0+0im; 0+0im; 0+0im]
+                        =#
                     end
                 end
             end
