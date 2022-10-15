@@ -1,0 +1,4 @@
+bus,conn,mode,kw_set,kvar_set,kv_set,amp_set,kvar_min,kvar_max,xd
+634,D,PQ,210,90,,,,,
+671,Y,PQV,900,,4.992,,-1000,1000,7.68
+675,Y,PI,150,,,22,0,180,
