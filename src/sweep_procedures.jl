@@ -177,16 +177,8 @@ function backwardsweep()
                         working_buses[n,:ibus_1] += Iline[1,1]
                         working_buses[n,:ibus_2] += Iline[2,1]
                         working_buses[n,:ibus_3] += Iline[3,1]
-                        Iline[1,1] = 0+0im
-                        Iline[2,1] = 0+0im
-                        Iline[3,1] = 0+0im
-                        Iphase[1,1] = 0+0im
-                        Iphase[2,1] = 0+0im
-                        Iphase[3,1] = 0+0im
-                        #=
-                        Iline = [0+0im; 0+0im; 0+0im]
-                        Iphase = [0+0im; 0+0im; 0+0im]
-                        =#
+                        Iline[1,1] = Iline[2,1] = Iline[3,1] = 0+0im
+                        Iphase[1,1] = Iphase[2,1] = Iphase[3,1] = 0+0im
                     end
                 end
             end
@@ -318,16 +310,8 @@ function backwardsweep()
                         working_buses[n,:ibus_1] += Iline[1,1]
                         working_buses[n,:ibus_2] += Iline[2,1]
                         working_buses[n,:ibus_3] += Iline[3,1]
-                        Iline[1,1] = 0+0im
-                        Iline[2,1] = 0+0im
-                        Iline[3,1] = 0+0im
-                        Iphase[1,1] = 0+0im
-                        Iphase[2,1] = 0+0im
-                        Iphase[3,1] = 0+0im
-                        #=
-                        Iline = [0+0im; 0+0im; 0+0im]
-                        Iphase = [0+0im; 0+0im; 0+0im]
-                        =#
+                        Iline[1,1] = Iline[2,1] = Iline[3,1] = 0+0im
+                        Iphase[1,1] = Iphase[2,1] = Iphase[3,1] = 0+0im
                     end
                 end
             end
