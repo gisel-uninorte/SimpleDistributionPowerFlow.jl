@@ -24,10 +24,6 @@ function forward_backward_sweep(tolerance,max_iterations)
 
         max_error = max(substation_voltage_error_1,substation_voltage_error_2,substation_voltage_error_3)
 
-        #println("FBS iteration = $(iter_number)")
-        #println("FBS max_error = $(max_error)")
-
-
         if iter_number == max_iterations
             err_msg = "Program halted, maximun number of forward-backward iteration reached ($(max_iterations))"
             break

@@ -77,6 +77,7 @@ function data_preparation()
         transformers[!,:Zt] = (transformers[!,:kv_low].^2)/transformers[!,:kva]*(transformers[!,:rpu]+transformers[!,:xpu]*1im).*1000
     end
 
+    #impedance matrices construction
     for m = 1:nrow(lines)
         #line impedance matrix construction
         if lines[m,:type] == 1 

@@ -1,5 +1,5 @@
 config,kva,phases,conn_high,conn_low,kv_high,kv_low,rpu,xpu
-grYgrYtrf,6000,abc,GrY,GrY,12.470,4.160,0.0100,0.0600
-YDtrf,6000,abc,Y,D,12.470,4.160,0.0100,0.0600
-DgrYtrf,6000,abc,D,grY,12.470,4.160,0.0100,0.0600
-DDtrf,6000,abc,D,D,12.470,4.160,0.0100,0.0600
+grY_grY_trf,6000,abc,GrY,GrY,12.470,4.160,0.0100,0.0600
+Y_D_trf,6000,abc,Y,D,12.470,4.160,0.0100,0.0600
+D_grY_trf,6000,abc,D,grY,12.470,4.160,0.0100,0.0600
+D_D_trf,6000,abc,D,D,12.470,4.160,0.0100,0.0600

@@ -192,32 +192,39 @@ function powerflow(; input="", output="",
                     volt_pi_bus = filter(row -> row.id == pi_distributed_gen[n,:bus], volt_pi_buses)
                     volt_pi_new = [abs(volt_pi_bus[1,:v_ph1]), abs(volt_pi_bus[1,:v_ph2]), abs(volt_pi_bus[1,:v_ph3])]
 
-                    amp_set = pi_distributed_gen[n,:amp_set]
-                    p_phase = pi_distributed_gen[n,:kw_set]*1000/3
-                    w_ph1 = p_phase
-                    w_ph2 = p_phase
-                    w_ph3 = p_phase
+                    i_set = pi_distributed_gen[n,:amp_set]
+                    p_ph = pi_distributed_gen[n,:kw_set]*1000/3
+                    q_min = pi_distributed_gen[n,:kvar_min]*1000/3
+                    q_max = pi_distributed_gen[n,:kvar_max]*1000/3
 
-                    if !((amp_set*volt_pi_new[1])^2 - p_phase^2 < 0)
-                        var_ph1 = sqrt((amp_set*volt_pi_new[1])^2 - p_phase^2)
-                    else var_ph1 = pi_distributed_gen[n,:kvar_min]*1000/3
-                    end
-                    if !((amp_set*volt_pi_new[2])^2 - p_phase^2 < 0)
-                        var_ph2 = sqrt((amp_set*volt_pi_new[2])^2 - p_phase^2)
-                    else var_ph2 = pi_distributed_gen[n,:kvar_min]*1000/3
-                    end
-                    if !((amp_set*volt_pi_new[3])^2 - p_phase^2 < 0)
-                        var_ph3 = sqrt((amp_set*volt_pi_new[3])^2 - p_phase^2)
-                    else var_ph3 = pi_distributed_gen[n,:kvar_min]*1000/3
+                    if pi_distributed_gen[n,:conn] == "Y"
+                        v_ph1 = abs(volt_pi_bus[1,:v_ph1])
+                        v_ph2 = abs(volt_pi_bus[1,:v_ph2])
+                        v_ph3 = abs(volt_pi_bus[1,:v_ph3])
+                        i_ph  = i_set                 
+                    elseif pi_distributed_gen[n,:conn] == "D"
+                        v_ph1 = abs(volt_pi_bus[1,:v_ph1] - volt_pi_bus[1,:v_ph2])
+                        v_ph2 = abs(volt_pi_bus[1,:v_ph2] - volt_pi_bus[1,:v_ph3])
+                        v_ph3 = abs(volt_pi_bus[1,:v_ph3] - volt_pi_bus[1,:v_ph1])
+                        i_ph  = i_set/sqrt(3) 
                     end
 
-                    if var_ph1 < pi_distributed_gen[n,:kvar_min]*1000/3   var_ph1 = pi_distributed_gen[n,:kvar_min]*1000/3; end
-                    if var_ph2 < pi_distributed_gen[n,:kvar_min]*1000/3   var_ph2 = pi_distributed_gen[n,:kvar_min]*1000/3; end
-                    if var_ph3 < pi_distributed_gen[n,:kvar_min]*1000/3   var_ph3 = pi_distributed_gen[n,:kvar_min]*1000/3; end
-
-                    if var_ph1 > pi_distributed_gen[n,:kvar_max]*1000/3   var_ph1 = pi_distributed_gen[n,:kvar_max]*1000/3; end
-                    if var_ph2 > pi_distributed_gen[n,:kvar_max]*1000/3   var_ph2 = pi_distributed_gen[n,:kvar_max]*1000/3; end
-                    if var_ph3 > pi_distributed_gen[n,:kvar_max]*1000/3   var_ph3 = pi_distributed_gen[n,:kvar_max]*1000/3; end
+                    if !((i_ph*v_ph1)^2 - p_ph^2 < 0)
+                        q_ph1 = sqrt((i_ph*v_ph1)^2 - p_ph^2)
+                    else q_ph1 = q_min
+                    end
+                    if !((i_ph*v_ph2)^2 - p_ph^2 < 0)
+                        q_ph2 = sqrt((i_ph*v_ph2)^2 - p_ph^2)
+                    else q_ph2 = q_min
+                    end
+                    if !((i_ph*v_ph3)^2 - p_ph^2 < 0)
+                        q_ph3 = sqrt((i_ph*v_ph3)^2 - p_ph^2)
+                    else q_ph3 = q_min
+                    end
+                    
+                    if q_ph1 > q_max   q_ph1 = q_max; end
+                    if q_ph2 > q_max   q_ph2 = q_max; end
+                    if q_ph3 > q_max   q_ph2 = q_max; end
 
 
                     #eliminate row of distributed generation from loads dataframe
@@ -225,7 +232,7 @@ function powerflow(; input="", output="",
 
                     #add row of distributed generation to loads dataframe with new P and Q data
                     push!(loads,(pi_distributed_gen[n,:bus],pi_distributed_gen[n,:conn],pi_distributed_gen[n,:mode],
-                                -(w_ph1 + var_ph1*1im), -(w_ph2 + var_ph2*1im), -(w_ph3 + var_ph3*1im), nothing, nothing, nothing))   
+                                -(p_ph + q_ph1*1im), -(p_ph + q_ph2*1im), -(p_ph + q_ph3*1im), nothing, nothing, nothing))   
                     
                     
                     #to follow voltage fixing between outer iterations
@@ -236,16 +243,16 @@ function powerflow(; input="", output="",
                     pi_distributed_gen[n,:v_ph2] = volt_pi_new[2]
                     pi_distributed_gen[n,:v_ph3] = volt_pi_new[3]
                     pi_distributed_gen[n,:max_diff] = max_volt_diff
-                    pi_distributed_gen[n,:w_ph1] = w_ph1
-                    pi_distributed_gen[n,:w_ph2] = w_ph2
-                    pi_distributed_gen[n,:w_ph3] = w_ph3 
-                    pi_distributed_gen[n,:var_ph1] = var_ph1
-                    pi_distributed_gen[n,:var_ph2] = var_ph2
-                    pi_distributed_gen[n,:var_ph3] = var_ph3
+                    pi_distributed_gen[n,:w_ph1] = p_ph
+                    pi_distributed_gen[n,:w_ph2] = p_ph
+                    pi_distributed_gen[n,:w_ph3] = p_ph
+                    pi_distributed_gen[n,:var_ph1] = q_ph1
+                    pi_distributed_gen[n,:var_ph2] = q_ph2
+                    pi_distributed_gen[n,:var_ph3] = q_ph3
 
                     filter!(row -> !(row.bus == pi_distributed_gen[n,:bus]), generation_register)
                     push!(generation_register, (pi_distributed_gen[n,:bus], pi_distributed_gen[n,:mode], pi_distributed_gen[n,:conn], 
-                                        w_ph1/1000, var_ph1/1000, w_ph2/1000, var_ph2/1000, w_ph3/1000, var_ph3/1000, max_volt_diff))
+                                        p_ph/1000, q_ph1/1000, p_ph/1000, q_ph2/1000, p_ph/1000, q_ph3/1000, max_volt_diff))
 
                 end
             end
