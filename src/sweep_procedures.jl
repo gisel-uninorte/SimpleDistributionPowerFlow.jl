@@ -306,6 +306,7 @@ function backwardsweep()
                         working_buses[n,:ibus_1] += Iline[1,1]
                         working_buses[n,:ibus_2] += Iline[2,1]
                         working_buses[n,:ibus_3] += Iline[3,1]
+                        #clearing variables
                         Iline[1,1] = Iline[2,1] = Iline[3,1] = 0+0im
                         Iphase[1,1] = Iphase[2,1] = Iphase[3,1] = 0+0im
                     end

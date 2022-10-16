@@ -24,6 +24,7 @@ opening and closing switches.
     graph_title::String=""
     marker_size::Float64=1.5
     timestamp::Bool=false
+    verbose::Bool=0
 ```
 
 # Data files

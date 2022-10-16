@@ -187,7 +187,7 @@ function data_preparation()
         end
     end
 
-    #generalized matrix construction (kersting 4ed, ch. 6) 
+    #generalized matrix construction (Kersting, Distribution System Modeling and Analysis 4ed, ch. 6) 
     gen_lines_mat = select(lines, [:bus1,:bus2])
     gen_lines_mat = [gen_lines_mat DataFrame(Matrix{Union{Complex, Nothing}}(nothing, nrow(lines),9),[:a_1_1,:a_1_2,:a_1_3,:a_2_1,:a_2_2,:a_2_3,:a_3_1,:a_3_2,:a_3_3,])]
     gen_lines_mat = [gen_lines_mat DataFrame(Matrix{Union{Complex, Nothing}}(nothing, nrow(lines),9),[:b_1_1,:b_1_2,:b_1_3,:b_2_1,:b_2_2,:b_2_3,:b_3_1,:b_3_2,:b_3_3,])]
