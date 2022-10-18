@@ -20,6 +20,8 @@ opening and closing switches.
     output::String=""
     tolerance::Float64=1e6
     max_iterations::Int=30
+    display_summary::Bool=true
+    save_topology::Bool=false
     display_topology::Bool=false
     graph_title::String=""
     marker_size::Float64=1.5
@@ -70,17 +72,17 @@ proposed by William H. Kersting in Distribution System Modeling and Analysis, 4t
 powerflow(input="examples/ieee-34", output="results", tolerance=1e-9, max_iterations=30, display_topology=true, 
           graph_title="ieee 34 node test feeder", marker_size=12, timestamp=true)
 ```
-Here `powerflow()`, by internally calling `gridtopology()` function discovers the topology of the network specified 
+Here `powerflow()`, by internally calling `gridtopology()` function display on terminal's screen the topology of the network specified 
 and executes the forward and backward sweeps until the calculated substation voltage differs lower than 1e-9 from the original value or 30 iterations are reached.
 """
 function powerflow(; input="", output="", 
                      tolerance=1e-6, max_iterations=30, 
-                     display_results=true, timestamp=false,
-                     display_topology=false, graph_title="",  marker_size=1.5, verbose=0)
+                     display_summary=true, timestamp=false,
+                     display_topology=false, save_topology=false, graph_title="",  marker_size=1.5, verbose=0)
     
     
     #Data input and discovery topology
-    err_msg = gridtopology(caller="powerflow", input=input, output=output, timestamp=timestamp,
+    err_msg = gridtopology(caller="powerflow", input=input, output=output, timestamp=timestamp, save_topology=save_topology,
                            display_topology=display_topology, graph_title=graph_title, marker_size=marker_size, verbose=verbose)
     if !(err_msg == "")
         return ("Execution aborted, $(err_msg)")
@@ -272,7 +274,7 @@ function powerflow(; input="", output="",
             println("Execution finished, $(outer_iteration) outer iterations, $(inner_iteration) inner iterations (for latest outer round), $(tolerance) tolerance")
         end
         #Write files with detailed powerflow results
-        results(display_results,timestamp)
+        results(display_summary,timestamp)
         else
         println("Execution aborted, $(err_msg)")
         return

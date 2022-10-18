@@ -3,7 +3,7 @@
 # Copyright (c) 2022 Gustavo Espitia, Cesar Orozco, Maria Calle, Universidad del Norte
 # Terms of license are in https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/blob/main/LICENSE
 
-function results(display_results,timestamp)
+function results(display_summary,timestamp)
     #Global variables
     global working_buses
     global auxiliar_buses
@@ -19,7 +19,6 @@ function results(display_results,timestamp)
         else working_buses[n,:phases] = "abc"
         end
     end
-
     if has_distributed_load
         auxiliar_buses.phases = missings(String, nrow(auxiliar_buses))
         for n = 1:nrow(auxiliar_buses)
@@ -30,42 +29,104 @@ function results(display_results,timestamp)
     #preparing volts report
     volts = select(working_buses, :id, :number)
     volts_phases = [volts DataFrame(Matrix{Union{Float64, Nothing}}(nothing, nrow(volts),6),[:volt_A,:deg_A,:volt_B,:deg_B,:volt_C,:deg_C])]
+    volts_pu = [volts DataFrame(Matrix{Union{Float64, Nothing}}(nothing, nrow(volts),6),[:volt_A,:deg_A,:volt_B,:deg_B,:volt_C,:deg_C])]
     for n = 1:nrow(volts_phases)
         if working_buses[n,:phases] == "a"
             volts_phases[n, :volt_A] = round.(abs.(working_buses[n, :v_ph1]),digits=1)
             volts_phases[n, :deg_A] = round.(rad2deg.(angle.(working_buses[n, :v_ph1])),digits=2)
+            volts_pu[n, :volt_A] = round.(abs.(working_buses[n, :v_ph1])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :deg_A] = round.(rad2deg.(angle.(working_buses[n, :v_ph1])),digits=2)
         elseif working_buses[n,:phases] == "b"
             volts_phases[n, :volt_B] = round.(abs.(working_buses[n, :v_ph2]),digits=1)
             volts_phases[n, :deg_B] = round.(rad2deg.(angle.(working_buses[n, :v_ph2])),digits=2)
+            volts_pu[n, :volt_B] = round.(abs.(working_buses[n, :v_ph2])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :deg_B] = round.(rad2deg.(angle.(working_buses[n, :v_ph2])),digits=2)
         elseif working_buses[n,:phases] == "c"
             volts_phases[n, :volt_C] = round.(abs.(working_buses[n, :v_ph3]),digits=1)
             volts_phases[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2)
+            volts_pu[n, :volt_C] = round.(abs.(working_buses[n, :v_ph3])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2)
         elseif working_buses[n,:phases] == "ab"
             volts_phases[n, :volt_A] = round.(abs.(working_buses[n, :v_ph1]),digits=1)
             volts_phases[n, :volt_B] = round.(abs.(working_buses[n, :v_ph2]),digits=1)
             volts_phases[n, :deg_A] = round.(rad2deg.(angle.(working_buses[n, :v_ph1])),digits=2)
             volts_phases[n, :deg_B] = round.(rad2deg.(angle.(working_buses[n, :v_ph2])),digits=2)
+            volts_pu[n, :volt_A] = round.(abs.(working_buses[n, :v_ph1])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :volt_B] = round.(abs.(working_buses[n, :v_ph2])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :deg_A] = round.(rad2deg.(angle.(working_buses[n, :v_ph1])),digits=2)
+            volts_pu[n, :deg_B] = round.(rad2deg.(angle.(working_buses[n, :v_ph2])),digits=2)
         elseif working_buses[n,:phases] == "bc"
             volts_phases[n, :volt_B] = round.(abs.(working_buses[n, :v_ph2]),digits=1)
             volts_phases[n, :volt_C] = round.(abs.(working_buses[n, :v_ph3]),digits=1)
             volts_phases[n, :deg_B] = round.(rad2deg.(angle.(working_buses[n, :v_ph2])),digits=2)
             volts_phases[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2)
+            volts_pu[n, :volt_B] = round.(abs.(working_buses[n, :v_ph2])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :volt_C] = round.(abs.(working_buses[n, :v_ph3])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :deg_B] = round.(rad2deg.(angle.(working_buses[n, :v_ph2])),digits=2)
+            volts_pu[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2)
         elseif working_buses[n,:phases] == "ac"
             volts_phases[n, :volt_A] = round.(abs.(working_buses[n, :v_ph1]),digits=1)
             volts_phases[n, :volt_C] = round.(abs.(working_buses[n, :v_ph3]),digits=1)
             volts_phases[n, :deg_A] = round.(rad2deg.(angle.(working_buses[n, :v_ph1])),digits=2)
             volts_phases[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2)
+            volts_pu[n, :volt_A] = round.(abs.(working_buses[n, :v_ph1])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :volt_C] = round.(abs.(working_buses[n, :v_ph3])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :deg_A] = round.(rad2deg.(angle.(working_buses[n, :v_ph1])),digits=2)
+            volts_pu[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2)
         elseif working_buses[n,:phases] == "abc"
             volts_phases[n, :volt_A] = round.(abs.(working_buses[n, :v_ph1]),digits=1)
             volts_phases[n, :volt_B] = round.(abs.(working_buses[n, :v_ph2]),digits=1)
             volts_phases[n, :volt_C] = round.(abs.(working_buses[n, :v_ph3]),digits=1)
             volts_phases[n, :deg_A] = round.(rad2deg.(angle.(working_buses[n, :v_ph1])),digits=2)
             volts_phases[n, :deg_B] = round.(rad2deg.(angle.(working_buses[n, :v_ph2])),digits=2)
-            volts_phases[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2)            
+            volts_phases[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2) 
+            volts_pu[n, :volt_A] = round.(abs.(working_buses[n, :v_ph1])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :volt_B] = round.(abs.(working_buses[n, :v_ph2])/working_buses[n, :v_base],digits=5)
+            volts_pu[n, :volt_C] = round.(abs.(working_buses[n, :v_ph3])/working_buses[n, :v_base],digits=5)    
+            volts_pu[n, :deg_A] = round.(rad2deg.(angle.(working_buses[n, :v_ph1])),digits=2)
+            volts_pu[n, :deg_B] = round.(rad2deg.(angle.(working_buses[n, :v_ph2])),digits=2)
+            volts_pu[n, :deg_C] = round.(rad2deg.(angle.(working_buses[n, :v_ph3])),digits=2)            
         end
     end
-    sort!(volts_phases,:id)
     select!(volts_phases,Not(:number))
+    sort!(volts_phases,:id)
+
+    select!(volts_pu,Not(:number))
+    sort!(volts_pu,:id)
+
+    ext_v_pu = DataFrame(max=0.0, bus_max=0, min=2.0, bus_min=0)
+    for n = 1:nrow(volts_pu)
+        if !(isnothing(volts_pu[n, :volt_A]))
+            if volts_pu[n, :volt_A] > ext_v_pu[1, :max]
+                ext_v_pu[1, :max] = volts_pu[n, :volt_A]
+                ext_v_pu[1, :bus_max] = volts_pu[n, :id]              
+            end
+            if volts_pu[n, :volt_A] < ext_v_pu[1, :min]
+                ext_v_pu[1, :min] = volts_pu[n, :volt_A]
+                ext_v_pu[1, :bus_min] = volts_pu[n, :id]            
+            end
+        end
+        if !(isnothing(volts_pu[n, :volt_B]))
+            if volts_pu[n, :volt_B] > ext_v_pu[1, :max]
+                ext_v_pu[1, :max] = volts_pu[n, :volt_B]
+                ext_v_pu[1, :bus_max] = volts_pu[n, :id]              
+            end
+            if volts_pu[n, :volt_B] < ext_v_pu[1, :min]
+                ext_v_pu[1, :min] = volts_pu[n, :volt_B]
+                ext_v_pu[1, :bus_min] = volts_pu[n, :id]            
+            end
+        end
+        if !(isnothing(volts_pu[n, :volt_C]))
+            if volts_pu[n, :volt_C] > ext_v_pu[1, :max]
+                ext_v_pu[1, :max] = volts_pu[n, :volt_C]
+                ext_v_pu[1, :bus_max] = volts_pu[n, :id]              
+            end
+            if volts_pu[n, :volt_C] < ext_v_pu[1, :min]
+                ext_v_pu[1, :min] = volts_pu[n, :volt_C]
+                ext_v_pu[1, :bus_min] = volts_pu[n, :id]            
+            end
+        end
+    end    
     
     volts_lines = [volts DataFrame(Matrix{Union{Float64, Nothing}}(nothing, nrow(volts),6),[:volt_AB,:deg_AB,:volt_BC,:deg_BC,:volt_CA,:deg_CA])]
     for n = 1:nrow(volts_lines)
@@ -299,8 +360,9 @@ function results(display_results,timestamp)
     if has_distributed_load
         #filtering out auxiliar buses for voltage reports
         volts_phases = filter(row -> !(row.id in auxiliar_buses.busx), volts_phases)
+        volts_pu = filter(row -> !(row.id in auxiliar_buses.busx), volts_pu)
         volts_lines = filter(row -> !(row.id in auxiliar_buses.busx), volts_lines)
-        sort!(volts_phases, :id)
+        #sort!(volts_phases, :id)
         sort!(volts_lines, :id)
 
         #filtering out auxiliar lines for current report
@@ -435,6 +497,7 @@ function results(display_results,timestamp)
     if timestamp
         date = Dates.format(now(),"yyyymmdd-HHMM") 
         something.(volts_phases, missing) |> CSV.write(joinpath(output_dir,"sdpf_volts_phase-"*date*".csv"))
+        something.(volts_pu, missing) |> CSV.write(joinpath(output_dir,"sdpf_volts_pu-"*date*".csv"))
         something.(volts_lines, missing) |> CSV.write(joinpath(output_dir,"sdpf_volts_line-"*date*".csv"))
         something.(cflow, missing) |> CSV.write(joinpath(output_dir,"sdpf_current_flow-"*date*".csv"))
         something.(pflow, missing) |> CSV.write(joinpath(output_dir,"sdpf_power_flow-"*date*".csv"))
@@ -445,6 +508,7 @@ function results(display_results,timestamp)
         end   
     else
         something.(volts_phases, missing) |> CSV.write(joinpath(output_dir,"sdpf_volts_phase.csv"))
+        something.(volts_pu, missing) |> CSV.write(joinpath(output_dir,"sdpf_volts_pu.csv"))
         something.(volts_lines, missing) |> CSV.write(joinpath(output_dir,"sdpf_volts_line.csv"))
         something.(cflow, missing) |> CSV.write(joinpath(output_dir,"sdpf_current_flow.csv"))
         something.(pflow, missing) |> CSV.write(joinpath(output_dir,"sdpf_power_flow.csv"))
@@ -455,18 +519,17 @@ function results(display_results,timestamp)
         end   
     end
         
-    if display_results
+    if display_summary
+        println("maximum voltage (pu): $(ext_v_pu[1,:max]) at bus $(ext_v_pu[1,:bus_max])")
+        println("minimum voltage (pu): $(ext_v_pu[1,:min]) at bus $(ext_v_pu[1,:bus_min])")
         println("Total Input Active Power:  $(round(total_input_power[1,:kW_in_ph1]+total_input_power[1,:kW_in_ph2]+total_input_power[1,:kW_in_ph3],digits=3)) kW")
         println("Total Input Reactive Power:  $(round(total_input_power[1,:kVAr_in_ph1]+total_input_power[1,:kVAr_in_ph2]+total_input_power[1,:kVAr_in_ph3],digits=3)) kVAr") 
         println("Total Active Power Losses:  $(total_plosses) kW")
         println("Total Reactive Power Losses:  $(total_qlosses) kVAr \n")
-        println("volts_phases: $(volts_phases) \n")
-
         if has_distributed_gen
             println("Distributed Generation: $(generation_register) \n")
         end
-
-        print("More results in $(output_dir)")
     end
+    print("Results in $(output_dir)")
     
 end
