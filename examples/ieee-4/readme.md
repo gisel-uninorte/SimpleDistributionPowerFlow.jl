@@ -26,13 +26,13 @@ julia> gridtopology(input="examples\\ieee-4", output="results")
 julia> powerflow(input="examples\\ieee-4", output="results")
 ```
 
-You can aggregate a title to the topology graph, per example:
+By default _gridtopology()_ saves a png file with the discovered topology, if you want to save te topology graph with _powerflow() you must set the save_topology option in true. You can aggregate a title to the topology graph, per example:
 ```julia
 julia> gridtopology(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder")
-julia> powerflow(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder")
+julia> powerflow(input="examples/ieee-4", output="results", save_topology=true, graph_title="IEEE 4 Node Test Feeder")
 ```
 
-By default, SimpleDistributionPowerFlow does not display the topology on the screen, although the graphics are saved in png files. If you want to get the image on the screen after the execution of the command, you have to specify it:
+By default, SimpleDistributionPowerFlow does not display the topology on the screen, although the graphics were saved in png files. If you want to get the image on the screen after the execution of the command, you have to specify it:
 ```julia
 julia> gridtopology(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder", display_topology=true)
 julia> powerflow(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder", display_topology=true)
