@@ -43,11 +43,12 @@ options | type | default | purpose/example
 --- | --- | :-: | --- 
 input | String | "" <br />(pwd) | input files location <br/> _gridtopology(input = "examples/ieee-34")_
 output | String |"" <br />(pwd) | results files location<br/> _gridtopology(output = "results")_
+save_topology | Bool | true | save in output directory a png file with the identified grid topology <br/> _powerflow(display_topology = false)_
 display_topology | Bool | false | display in screen the identified grid topology<br/> _gridtopology(display_topology = true)_
 timestamp | Bool | false | add a timestamp to results file names <br/>  _gridtopology(timestamp = true)_
 graph_title | String  | "" <br />(nothing)| set a title in topology graph <br/> _gridtopology(graph_title = "modified ieee-34 test feeder")_
 marker_size | Float  | 1.5 | set the size of bus identifier in graph<br/>  _gridtopology(marker_size = 10)_
-verbose   | Int  | 0 |  set the level of program verbosity (currently 0 or 1) <br /> _powerflow(verbose = 1)_
+verbose   | Int  | 0 |  set the level of program verbosity (only 0 or 1 are available) <br /> _powerflow(verbose = 1)_
 
 ***For powerflow analysis***: `powerflow()`
 
@@ -57,12 +58,13 @@ input    | String  | "" <br />(pwd) | input files location <br /> _powerflow(inp
 output   | String  |"" <br />(pwd) | results files location <br /> _powerflow(output = "results")_
 tolerance  | Float  | 1e-6 | maximum porcentual difference between calculated and nominal substation bus voltage <br /> _powerflow(tolerance = 0.001)_
 max_iteration | Int  | 30 | maximum number of iteration before procedure halt <br />_powerflow(max_iteration = 100)_
-display_results | Bool | true | display in screen bus voltage results <br /> _powerflow(display_results = false)_
-display_topology | Bool | false | display in screen the identified grid topology <br/> _powerflow(display_topology = true)_
+display_summary | Bool | true | display in terminal screen a results summary <br /> _powerflow(display_results = false)_
+save_topology | Bool | false | save in output directory a png file with the identified grid topology <br/> _powerflow(display_topology = true)_
+display_topology | Bool | false | display in terminal screen the identified grid topology <br/> _powerflow(display_topology = true)_
 timestamp  | Bool | false |add a timestamp to results file names <br /> _powerflow(timestamp = true)_
 graph_title  | String | "" (nothing)| set a title in topology graph <br /> _powerflow(graph_title = "modified ieee-34 test feeder")_
 marker_size    | Float  | 1.5 |  set the size of bus identifier in graph <br /> _powerflow(marker_size = 10)_
-verbose   | Int  | 0 |  set the level of program verbosity (currently 0 or 1) <br /> _powerflow(verbose = 1)_
+verbose   | Int  | 0 |  set the level of program verbosity (only 0 or 1 are available) <br /> _powerflow(verbose = 1)_
 
 
 ## Special features
