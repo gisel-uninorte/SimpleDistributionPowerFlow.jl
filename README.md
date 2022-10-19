@@ -14,7 +14,7 @@ Grid topology is discovered based on input line segments, transformers and the s
 ## Installation
 ```julia
 julia> ]
-(1.6) pkg> add SimpleDistributionPowerFlow
+pkg> add SimpleDistributionPowerFlow
 ```
 
 ## Configuration files
