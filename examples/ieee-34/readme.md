@@ -25,7 +25,3 @@ For working topology several buses were automatically added to model the distrib
 
 More explanations on specific command arguments can be found in [ieee-4](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-4) example. 
 
-## For Distributed Generation
-To include DGs you can follow the explanation given in [ieee-13](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-13) example.
-
-

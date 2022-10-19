@@ -24,8 +24,3 @@ In this case some auxiliar buses were added in configuration files to connect th
 For working topology buses 195, 251, 350 and 451 were automatically pruned because the associated switches were in open state.
 
 More explanations on specific command arguments can be found in [ieee-4](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-4) example. 
-
-## For Distributed Generation
-To include DGs you can follow the explanation given in [ieee-13](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-13) example.
-
-

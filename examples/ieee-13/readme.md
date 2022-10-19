@@ -9,7 +9,7 @@ The `using` command is only needed once per Julia sesion:
 ```julia
 julia> using  SimpleDistributionPowerFlow
 julia> gridtopology(input="examples/ieee-13", output="results", graph_title="IEEE 13 Node Test Feeder")
-julia> powerflow(input="examples/ieee-13", output="results", graph_title="IEEE 13 Node Test Feeder")
+julia> powerflow(input="examples/ieee-13", output="results", save_topology=true, graph_title="IEEE 13 Node Test Feeder")
 ```
 
 <table>
@@ -26,19 +26,4 @@ There is a bus_coords.csv file in input directory for this reason the relative l
 For working topology a bus was added automatically to model the distributed load between buses 632 and 671. This auxiliar bus will be deleted automatically after powerflow execution and before the results were printed.
 
 More explanations on specific command arguments can be found in [ieee-4](https://github.com/gisel-uninorte/SimpleDistributionPowerFlow.jl/tree/main/examples/ieee-4) example. 
-
-## For Distributed Generation
-To execute powerflow with DG rename the example file to distributed_generation.csv (removing the first underscore sign) and run the command:
-```julia
-julia> powerflow(input="examples/ieee-13", output="results")
-```
-
-The example has different DGs at buses 634 (PQ), 671 (PQV) and 675 (PI), connected in wye or delta. The following table shows the required values for the specific DG mode. Value of xd is in ohm.
-
-bus | conn | mode | kw_set | kvar_set | kv_set | amp_set | kvar_min | kvar_max | xd
---- | ---  | ---  | ---    | ---      | ---    | ---     | ---      | ---      | ---
-634 | Y  | PQ  | 210    | 90      | ---    | ---     | ---      | ---      | ---
-671 | Y  | PQV  | 900    | ---      | 4.992   | ---     | -1000      | 1000      | 7.68
-675 | D  | PI  | 150   | ---      | ---    | 22     | 0     | 180     | ---
-
 

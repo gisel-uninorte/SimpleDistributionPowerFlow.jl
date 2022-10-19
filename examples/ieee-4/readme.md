@@ -26,7 +26,7 @@ julia> gridtopology(input="examples\\ieee-4", output="results")
 julia> powerflow(input="examples\\ieee-4", output="results")
 ```
 
-By default _gridtopology()_ saves a png file with the discovered topology, if you want to save te topology graph with _powerflow() you must set the save_topology option in true. You can aggregate a title to the topology graph, per example:
+By default _gridtopology()_ saves a png file with the discovered topology, if you want to save te topology graph with _powerflow()_ you must set the save_topology option in true. You can aggregate a title to the topology graph, per example:
 ```julia
 julia> gridtopology(input="examples/ieee-4", output="results", graph_title="IEEE 4 Node Test Feeder")
 julia> powerflow(input="examples/ieee-4", output="results", save_topology=true, graph_title="IEEE 4 Node Test Feeder")
